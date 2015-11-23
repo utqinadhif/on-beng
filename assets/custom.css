@@ -1,0 +1,98 @@
+@charset "utf-8";
+
+@import url('bootstrap/css/bootstrap.css');
+@import url('toast/jquery.toast.css');
+@import url('jquery-ui/jquery-ui.css');
+@import url('font-awesome/css/font-awesome.min.css');
+@import url('sidebar.css');
+
+html,
+body,
+.container-fluid,
+.col-md-12,
+.row,
+#map {
+  height:        100%;
+}
+.container-fluid,
+.row,
+.col-md-12 {
+  padding-right: 0;
+  padding-left:  0;
+}
+.float_form {
+  top:     7%;
+  height:  100%;
+  opacity: 0.7;
+  z-index: 9999;
+}
+.cls {
+  cursor: pointer;
+}
+.c {
+  margin: 5%;
+}
+.menu {
+  margin:  1%;
+  z-index: 9;
+}
+.btn_menu {
+  margin-bottom: 2%;
+}
+.item > ul,
+.btn_menu {
+  list-style-type: none;
+  border:          1px groove #CCC;
+  padding:         10%;
+  width:           100%;
+  text-align:      center;
+  border-radius:   5%;
+  background:      #EFF;
+  font-weight:     bold;
+  opacity:         0.7;
+}
+.item > ul:hover {
+  border:          1px solid #555;
+}
+/*loading*/
+.loading {
+  position:   fixed;
+  left:       0px;
+  top:        0px;
+  width:      100%;
+  height:     100%;
+  z-index:    9999;
+  background: url(images/loading.gif) 50% 50% no-repeat transparent;
+}
+/*main*/
+.fa-6 {
+  font-size: 1em;
+}
+.center {
+  text-align: center;
+}
+.center > .h5 {
+  font-weight: bold;
+}
+.login {
+  z-index: 9999;
+  top:     20%;
+  opacity: 0.7;
+}
+
+/*media*/
+@media (max-width: 992px){
+  .float_form {
+    overflow-y:    scroll;
+    top: 1%;
+  }
+  .cont {
+    float: initial;
+  }
+  .side {
+    float: initial;
+  }
+  .h-d {
+    display: block;
+  }
+}
