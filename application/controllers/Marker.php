@@ -60,8 +60,9 @@ class Marker extends CI_Controller
 			{
 				echo json_encode(
           array(
-  					'ok'=>1
-  					)
+            'ok'  => 1,
+            'msg' => 'Success'
+            )
           );
 			}
 		}else

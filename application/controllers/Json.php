@@ -27,6 +27,7 @@ class Json extends CI_Controller
     {
       $all = $this->db->where('id_marker', $id_marker);
     }
+    $all = $this->db->order_by('id_marker', 'asc');
     $all = $this->db->get('beo_bengkel');
     $all = $all->result();
 
@@ -39,20 +40,5 @@ class Json extends CI_Controller
     }
 
     pretty_json($result);
-  }
-
-  /*
-  this function for insert, confirm and cancel from user side
-  */
-  public function insert()
-  {
-  }
-
-  public function confirm()
-  {
-  }
-
-  public function cancel()
-  {
   }
 }

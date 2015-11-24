@@ -17,12 +17,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Address</th>
-                    <th>Contact</th>
                     <th>Email</th>
+                    <th>Contact</th>
+                    <th>Detail Address</th>
                     <th>Latitude</th>
                     <th>Langitude</th>
-                    <th>Bengkel</th>
+                    <th>Bengkel Yang Dipesan</th>
+                    <th>Process</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -30,19 +31,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   $current_number = $num_start;
                   foreach ($data->result() as $key => $value)
                   {
-                    $profile  = json_decode($value->profile);
-                    $location = json_decode($value->location);
+                    $profile         = json_decode($value->profile);
+                    $location        = json_decode($value->location);
+                    $bengkel_profile = json_decode($value->bengkel_profile);
                     ?>
                     <tr>
                       <td><?php echo $num_start++; ?></td>
                       <td><?php echo $profile->name; ?></td>
-                      <td><?php echo $profile->company; ?></td>
-                      <td><?php echo $profile->contact; ?></td>
                       <td><?php echo $profile->email; ?></td>
+                      <td><?php echo $profile->contact; ?></td>
+                      <td><?php echo $profile->detail_address; ?></td>
                       <td><?php echo $location->lat; ?></td>
                       <td><?php echo $location->lng; ?></td>
-                      <td><?php echo $value->created; ?></td>
-                      <td><?php echo $value->updated; ?></td>
+                      <td>
+                        Name: <?php echo $bengkel_profile->name;?><br>
+                        Company: <?php echo $bengkel_profile->company;?><br>
+                        Contact: <?php echo $bengkel_profile->contact;?><br>
+                        Email: <?php echo $bengkel_profile->email;?>
+                      </td>
+                      <td>Link</td>
                     </tr>
                     <?php
                   }

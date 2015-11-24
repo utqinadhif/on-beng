@@ -46,7 +46,10 @@ class Data_request extends CI_Controller
     
     $this->pagination->initialize($config);    
     $data['paging']    = $this->pagination->create_links();
-    $data['data']      = $this->db->limit($config['per_page'], $offset)->get("beo_request");
+    $data['data']      = $this->db->select('r.*, b.profile AS bengkel_profile');
+    $data['data']      = $this->db->from('beo_request AS r');
+    $data['data']      = $this->db->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left');
+    $data['data']      = $this->db->limit($config['per_page'], $offset)->get();
     $data['num_start'] = $offset + 1;
     $data['total']     = $config['total_rows'];
 
