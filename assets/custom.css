@@ -41,17 +41,17 @@ body,
 .item > ul,
 .btn_menu {
   list-style-type: none;
-  border:          1px groove #CCC;
+  border:          1px solid #9c27b0;
   padding:         10%;
   width:           100%;
   text-align:      center;
   border-radius:   5%;
-  background:      #EFF;
+  background:      #DDD;
   font-weight:     bold;
   opacity:         0.7;
 }
 .item > ul:hover {
-  border:          1px solid #555;
+  border: 1px solid #7b1fa2;
 }
 /*loading*/
 .loading {

@@ -48,3 +48,18 @@ function load(id){
     break;
   }
 }
+function nownow(){
+    var c = new Date();
+    var y = String(c.getFullYear());
+    var m = fix(c.getMonth());
+    var d = fix(c.getDate());
+    var h = fix(c.getHours());
+    var min = fix(c.getMinutes());
+    var s = fix(c.getSeconds());
+    return y+m+d+h+min+s;
+}
+
+function fix(x){
+    y = String(x).length < 2 ? '0'+x : x;
+    return y;
+}

@@ -24,16 +24,17 @@ class Main extends CI_Controller
 	{
 		$user = $this->security->xss_clean($this->input->post('user'));
 		$pass = $this->security->xss_clean($this->input->post('pass'));
-		$ph   = password_hash($pass, PASSWORD_BCRYPT);
 
-		if(!empty($user) && !empty($pass))
-		{
+    if(!empty($user) && !empty($pass))
+    {
+		  $ph     = password_hash($pass, PASSWORD_BCRYPT);
 			$query  = $this->db->select('pass');
       $query  = $this->db->from('beo_admin');
       $query  = $this->db->where('user', $user);
       $query  = $this->db->get();
       $result = $query->row()->pass;
-      if(password_verify($result, $ph)){
+      if(password_verify($result, $ph))
+      {
       	$sess = array(
       		'user' => $user,
       		'ip'   => $this->input->ip_address()

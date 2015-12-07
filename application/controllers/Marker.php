@@ -31,28 +31,33 @@ class Marker extends CI_Controller
 		$contact   = $this->security->xss_clean($this->input->post('contact'));
 		$email     = $this->security->xss_clean($this->input->post('email'));
 		$location  = $this->security->xss_clean($this->input->post('location'));
+    $latlng    = $this->security->xss_clean($this->input->post('latlng'));
     
 
-    if(!empty($name) &&
+    if(
+      !empty($name)    &&
       !empty($company) &&
       !empty($contact) &&
-      !empty($email))
+      !empty($email)   &&
+      !empty($location)
+      )
     {
       // location
-      $location = fix_location($location);
+      $latlng = fix_location($latlng);
       //profile
       $profile = array(
-        'name'    => $name,
-        'company' => $company,
-        'contact' => $contact,
-        'email'   => $email
+        'name'     => $name,
+        'company'  => $company,
+        'contact'  => $contact,
+        'email'    => $email,
+        'location' => $location
         );
       // main data
   		$data = array(
   			'id_marker' => $id_marker,
   			'profile'   => json_encode($profile),
-  			'location'  => json_encode($location),
-        'created' => date('Y-m-d H:i:s')
+  			'latlng'    => json_encode($latlng),
+        'created'   => date('Y-m-d H:i:s')
   			);
 
 			$save = $this->db->insert('beo_bengkel', $data);
@@ -109,28 +114,33 @@ class Marker extends CI_Controller
     $contact   = $this->security->xss_clean($this->input->post('contact'));
     $email     = $this->security->xss_clean($this->input->post('email'));
     $location  = $this->security->xss_clean($this->input->post('location'));
+    $latlng    = $this->security->xss_clean($this->input->post('latlng'));
 
 
-    if(!empty($name) &&
+    if(
+      !empty($name)    &&
       !empty($company) &&
       !empty($contact) &&
-      !empty($email))
+      !empty($email)   &&
+      !empty($location)
+      )
     {
       // location
-      $location = fix_location($location);
+      $latlng = fix_location($latlng);
       //profile
       $profile = array(
-        'name'    => $name,
-        'company' => $company,
-        'contact' => $contact,
-        'email'   => $email
+        'name'     => $name,
+        'company'  => $company,
+        'contact'  => $contact,
+        'email'    => $email,
+        'location' => $location
         );
       // main data
       $data = array(
         'id_marker' => $id_marker,
         'profile'   => json_encode($profile),
-        'location'  => json_encode($location),
-        'updated' => date('Y-m-d H:i:s')
+        'latlng'    => json_encode($latlng),
+        'updated'   => date('Y-m-d H:i:s')
         );
 
       $update = $this->db->where('id_marker', $id_marker);
@@ -167,8 +177,8 @@ class Marker extends CI_Controller
 			{
 				foreach ($query->result() as $row)
 				{
-          $profile  = json_decode($row->profile);
-          $location = json_decode($row->location);
+          $profile = json_decode($row->profile);
+          $latlng  = json_decode($row->latlng);
 
 					echo json_encode(array(
 						'ok'        => 1,
@@ -177,7 +187,8 @@ class Marker extends CI_Controller
 						'company'   => $profile->company,
 						'contact'   => $profile->contact,
 						'email'     => $profile->email,
-						'location'  => '('.$location->lat.', '.$location->lng.')'
+            'location'  => $profile->location,
+						'latlng'    => '('.$latlng->lat.', '.$latlng->lng.')'
 						));
 				}
 			}else

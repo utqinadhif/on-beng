@@ -32,13 +32,28 @@ class Json extends CI_Controller
     $all = $all->result();
 
     foreach ($all as $k => $v) {
-      $v->profile  = json_decode($v->profile);
-      $v->location = json_decode($v->location);
+      $profile  = json_decode($v->profile);
+      $location = json_decode($v->location);
+
+      $v->name = $profile->name;
       $key = $v->id_marker;
-      unset($v->id_marker);
-      $result[$key] = $v;
+      $result[] = array(
+        "id"        => $v->id,
+        "id_marker" => $v->id_marker,
+        "name"      => $profile->name,
+        "company"   => $profile->company,
+        "contact"   => $profile->contact,
+        "email"     => $profile->email,
+        "lat"       => $location->lat,
+        "lng"       => $location->lng,
+        "created"   => $v->created,
+        "updated"   => $v->updated,
+        );
     }
 
-    pretty_json($result);
+    $output["ok"] = 1;
+    $output["result"] = $result;
+
+    pretty_json($output);
   }
 }

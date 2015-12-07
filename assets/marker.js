@@ -1,6 +1,3 @@
-var uniqueId  = function() {
-  return ++currentId;
-}
 var markers   = {};
 var unchangedEnd;
 var unchangedStart;
@@ -32,11 +29,11 @@ function nadhifMap() {
   });
 
   google.maps.event.addListener(map, 'rightclick', function(event) {
-    var uid = uniqueId();
+    var uid = nownow();
     addMarker(event.latLng, map, uid, 1);
     $('.float_form').show('slide', { direction: "right" });
     reset();
-    $('#location').val(event.latLng);
+    $('#latlng').val(event.latLng);
     $('#current_loc').val(event.latLng);
     $('#title').html("FORM INPUT");
     $('#submit').val('SIMPAN');
@@ -111,7 +108,7 @@ function addMarker(location, map, id_marker, icon) {
   });
 
   google.maps.event.addListener(marker,'drag',function(event) {
-    $('#location').val(event.latLng);
+    $('#latlng').val(event.latLng);
   });
 
   google.maps.event.addListener(marker,'dragend',function(event) {
@@ -120,7 +117,7 @@ function addMarker(location, map, id_marker, icon) {
       id_marker: marker.get("id"),
       loc:       event.latLng
     };
-    $('#location').val(event.latLng);
+    $('#latlng').val(event.latLng);
     toast('The location has changed', 'i');
   });
   google.maps.event.addListener(marker,'dragstart',function(event) {
@@ -181,7 +178,8 @@ function searchMarker(latLng, id_marker){
         $('#company').val(result.company);
         $('#contact').val(result.contact);
         $('#email').val(result.email);
-        $('#location').val(latLng);
+        $('#location').val(result.location);
+        $('#latlng').val(latLng);
         $('#current_loc').val(result.location);
         $('#title').html("FORM EDIT");
         $('#submit').val('UBAH');
@@ -189,7 +187,7 @@ function searchMarker(latLng, id_marker){
       }else
       if(result.ok == 2){
         reset();
-        $('#location').val(latLng);
+        $('#latlng').val(latLng);
         $('.float_form').show('slide', { direction: "right" });
         $('#judul').html("FORM INPUT");
         toast("Unsaved Data", 'e');

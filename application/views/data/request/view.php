@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="row">
     <div class="col-sm-12">
       <div class="panel panel-default">
-        <div class="panel-heading">Data Bengkel</div>
+        <div class="panel-heading">Data Request Customer</div>
         <div class="panel-body">
           <?php
           if($total>0)
@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <th>Detail Address</th>
                     <th>Latitude</th>
                     <th>Langitude</th>
-                    <th>Bengkel Yang Dipesan</th>
+                    <th>Bengkel Ordered</th>
                     <th>Process</th>
                   </tr>
                 </thead>

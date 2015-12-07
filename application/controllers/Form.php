@@ -10,24 +10,48 @@ class Form extends CI_Controller
     $this->load->helper(array('url', 'general', 'date'));
     date_default_timezone_set('Asia/Jakarta');
   }
-  public function general_register()
+  public function general_request()
   {
+    $username    = $this->security->xss_clean($this->input->post('username'));
+    $password    = $this->security->xss_clean($this->input->post('password'));
+    if(
+      !empty($username) &&
+      !empty($password)
+      )
+    {
+      $customer_id = $this->_check($username, $password);
+    }else
+    {
+      echo json_encode(
+        array(
+          'ok'  => 0,
+          'msg' => 'Error page'
+          )
+        );
+    }
+
     //search near bengkel from current location
     $name           = $this->security->xss_clean($this->input->post('name'));
     $email          = $this->security->xss_clean($this->input->post('email'));
     $contact        = $this->security->xss_clean($this->input->post('contact'));
-    $detail_address = $this->security->xss_clean($this->input->post('detail_adress'));
     $location       = $this->security->xss_clean($this->input->post('location'));
+    $latlng         = $this->security->xss_clean($this->input->post('latlng'));
 
-    if(!empty($name) &&
-      !empty($email) &&
-      !empty($contact) &&
-      !empty($location))
+    $damage          = $this->security->xss_clean($this->input->post('damage'));    
+    $detail_location = $this->security->xss_clean($this->input->post('detail_location'));
+    $latlng          = $this->security->xss_clean($this->input->post('latlng'));
+    
+
+    if(
+      !empty($damage)          &&
+      !empty($detail_location) &&
+      !empty($latlng)
+      )
     {
       // location
-      $location_now = fix_location($location);
+      $location_now = fix_location($latlng);
 
-      $query = $this->db->select('id, location');
+      $query = $this->db->select('id, latlng');
       $query = $this->db->from('beo_bengkel');
       $query = $this->db->get();
 
@@ -35,25 +59,21 @@ class Form extends CI_Controller
       $d        = array();
       foreach ($query->result() as $row)
       {
-        $location           = json_decode($row->location);
-        $dis                = distance($location_now['lat'], $location_now['lng'], $location->lat, $location->lng);
+        $latlng             = json_decode($row->latlng);
+        $dis                = distance($location_now['lat'], $location_now['lng'], $latlng->lat, $latlng->lng);
         $distance[$row->id] = $dis;
         $d[]                = $dis;
       }
       $near_id = array_search(min($d), $distance);
-      //profile
-      $profile = array(
-        'name'           => $name,
-        'email'          => $email,
-        'contact'        => $contact,
-        'detail_address' => $detail_address
-        );
+
       // main data
       $data = array(
-        'bengkel_id' => $near_id,
-        'profile'    => json_encode($profile),
-        'location'   => json_encode($location_now),
-        'type'       => 1
+        'bengkel_id'      => $near_id,
+        'customer_id'     => $customer_id,
+        'latlng'          => json_encode($latlng),
+        'detail_location' => $detail_location,
+        'type'            => 1,
+        'created'         => date('Y-m-d H:i:s')
         );
       $save = $this->db->insert('beo_request', $data);
       if($save)
@@ -84,36 +104,55 @@ class Form extends CI_Controller
     }
   }
 
-  public function spesific_register()
+  public function spesific_request()
   {
-    $bengkel_id     = $this->security->xss_clean($this->input->post('bengkel_id'));
-    $name           = $this->security->xss_clean($this->input->post('name'));
-    $email          = $this->security->xss_clean($this->input->post('email'));
-    $contact        = $this->security->xss_clean($this->input->post('contact'));
-    $detail_address = $this->security->xss_clean($this->input->post('detail_adress'));
-    $location       = $this->security->xss_clean($this->input->post('location'));
-
-    if(!empty($bengkel_id) &&
-      !empty($name) &&
-      !empty($email) &&
-      !empty($contact) &&
-      !empty($location))
+    $username    = $this->security->xss_clean($this->input->post('username'));
+    $password    = $this->security->xss_clean($this->input->post('password'));
+    if(
+      !empty($username) &&
+      !empty($password)
+      )
     {
-      // location
-      $location = fix_location($location);
-      //profile
-      $profile = array(
-        'name'           => $name,
-        'email'          => $email,
-        'contact'        => $contact,
-        'detail_address' => $detail_address
+      $customer_id = $this->_check($username, $password);
+    }else
+    {
+      echo json_encode(
+        array(
+          'ok'  => 0,
+          'msg' => 'Error page'
+          )
         );
+    }
+
+    $id_marker       = $this->security->xss_clean($this->input->post('id_marker'));
+    $damage          = $this->security->xss_clean($this->input->post('damage'));    
+    $detail_location = $this->security->xss_clean($this->input->post('detail_location'));
+    $latlng          = $this->security->xss_clean($this->input->post('latlng'));
+    
+
+    if(
+      !empty($id_marker)       &&
+      !empty($damage)          &&
+      !empty($detail_location) &&
+      !empty($latlng)
+      )
+    {
+      // get bengkel_id
+      $query      = $this->db->select('id');
+      $query      = $this->db->from('beo_bengkel');
+      $query      = $this->db->where('id_marker', $id_marker);
+      $query      = $this->db->get();
+      $bengkel_id = $query->row()->id;
+      // location
+      $latlng = fix_location($latlng);
       // main data
       $data = array(
-        'bengkel_id' => $bengkel_id,
-        'profile'    => json_encode($profile),
-        'location'   => json_encode($location),
-        'type'       => 2
+        'bengkel_id'      => $bengkel_id,
+        'customer_id'     => $customer_id,
+        'latlng'          => json_encode($latlng),
+        'detail_location' => $detail_location,
+        'type'            => 2,
+        'created'         => date('Y-m-d H:i:s')
         );
       $save = $this->db->insert('beo_request', $data);
       if($save)
@@ -141,6 +180,27 @@ class Form extends CI_Controller
           'msg' => 'Error page'
           )
         );
+    }
+  }
+
+  public function _check($username, $password)
+  {
+    if(
+      !empty($username)&&
+      !empty($password)
+      )
+    {
+      $ph = password_hash($password, PASSWORD_BCRYPT);
+
+      $query  = $this->db->select('id, pass');
+      $query  = $this->db->from('beo_customer');
+      $query  = $this->db->where('username', $username);
+      $query  = $this->db->get();
+      $result = $query->row()->pass;
+      if(password_verify($result, $ph))
+      {
+        return $query->row()->id;
+      }      
     }
   }
 }
