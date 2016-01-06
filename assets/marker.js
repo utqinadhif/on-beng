@@ -180,7 +180,7 @@ function searchMarker(latLng, id_marker){
         $('#email').val(result.email);
         $('#location').val(result.location);
         $('#latlng').val(latLng);
-        $('#current_loc').val(result.location);
+        $('#current_loc').val(result.latlng);
         $('#title').html("FORM EDIT");
         $('#submit').val('UBAH');
         $('#id_marker').val(result.id_marker);
@@ -331,9 +331,18 @@ $(document).ready(function() {
     reset();
   });
   $('.float_form').hide();
-  $('.item').hide();
-  $('.btn_menu').click(function(){
-    $('.item').toggle('fold');
+  $('.item').hover(function(){
+    if($(this).hasClass('op')){
+      $(this).removeClass('op');
+    }else{
+      $(this).addClass('op');
+    }
   });
-  $('[data-toggle="tooltip"]').tooltip();
+  $('.open_modal').click(function() {
+    $('.modal-title').html($(this).data('title'));
+    $('.modal-body').html('<iframe id="frame" src="'+$(this).attr('href')+'"></iframe>')
+    $('#myModal').modal();
+    console.log($(this));
+    return false;
+  });
 });

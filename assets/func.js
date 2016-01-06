@@ -63,3 +63,38 @@ function fix(x){
     y = String(x).length < 2 ? '0'+x : x;
     return y;
 }
+$(document).ready(function() { 
+  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="popover"]').popover();
+  $('.confirm').click(function(){
+    var a = $(this);
+    dialog('Are you sure to exit?')
+    $("#dialog").dialog('option', 'buttons', {
+    "YES, I'm Sure" : function(){
+        document.location.href=a.attr('href');
+    },
+    "No" : function(){
+        $(this).dialog('close');
+    }
+    });
+    return false;
+  });
+  $('.rst').click(function(e){
+    e.preventDefault();
+    $.post('', {search: '*'}, function(data, textStatus, xhr) {
+        if(textStatus=='success'){
+            location.href=$('#search').attr('action');
+        }
+    });
+  });
+  $('#search').submit(function(e){
+    e.preventDefault();
+    var key = $(this).find('.form-control').val();
+    key = key ? key : '*';
+    $.post('', {search: key}, function(data, textStatus, xhr) {
+        if(textStatus=='success'){
+            location.href=$('#search').attr('action');
+        }
+    });
+  });
+});

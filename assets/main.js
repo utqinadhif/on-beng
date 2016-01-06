@@ -53,15 +53,52 @@ function addMarker(location, map, id_marker, icon) {
   });
 }
 $(document).ready(function() {
-  $('.item').hide();
-  $('.btn_menu').click(function(){
-    $('.item').toggle('fold');
+  $('.item').hover(function(){
+    if($(this).hasClass('op')){
+      $(this).removeClass('op');
+    }else{
+      $(this).addClass('op');
+    }
   });
-  $('[data-toggle="tooltip"]').tooltip();
   $('.login').hide();
   $('.open_hide').click(function(e){
     e.preventDefault();
-    $('.login').toggle('size');
+    var a = $('.login').html();
+    var b = $(this).attr('tit');
+    $('#myModal').modal('show');
+    $('.title').html(b);
+    $('.content').html(a);
+    $('#login').submit(function(){
+      var u = $('#user').val();
+      var p = $('#pass').val();
+      if(u != '' && p != ''){
+        $.ajax({
+          url: base_url+'main/login',
+          type: 'post',
+          dataType: 'json',
+          data: $(this).serialize(),
+          error: function (a, b, c) {
+            load(2);
+            toast(a+b+c, 'e');
+          },
+          cache: false,
+          beforeSend: function() {
+            load(1);
+          },
+          success: function(result){
+            load(2);
+            if(result.ok){
+              document.location.href = result.href;
+            }else{
+              toast(result.msg, 'e');
+            }
+          }
+        });
+      }else{
+        toast('Empty username or password, please check again!', 'e');
+      }
+      return false;    
+    });
   });
   $('.load_url').click(function(e){
     e.preventDefault();
@@ -70,30 +107,5 @@ $(document).ready(function() {
     $('#myModal').modal('show');
     $('.title').html(b);
     $('.content').load(a);
-  });
-  $('#login').submit(function(){
-    $.ajax({
-      url: base_url+'main/login',
-      type: 'post',
-      dataType: 'json',
-      data: $(this).serialize(),
-      error: function (a, b, c) {
-        load(2);
-        toast(a+b+c, 'e');
-      },
-      cache: false,
-      beforeSend: function() {
-        load(1);
-      },
-      success: function(result){
-        load(2);
-        if(result.ok){
-          document.location.href = result.href;
-        }else{
-          toast(result.msg, 'e');
-        }
-      }
-    }); 
-    return false;    
   });
 });

@@ -15,20 +15,17 @@ class Data_request extends CI_Controller
     }
     $this->load->view('meta');
     $this->load->view('script');
-    $this->load->view('data/nav');
   }
   public function index()
   {
     redirect(base_url('data_request/view'));
   }
 
-  function view($offset=0)
-  {    
-    $config['base_url']         = base_url('data_request/view');
-    $config['total_rows']       = $this->db->get("beo_request")->num_rows();
+  function view()
+  {
     $config['per_page']         = 10;
-    $config['uri_segment']      = 3;
     $config['num_links']        = 5;
+    $config['use_page_number']  = TRUE;
     $config['full_tag_open']    = "<ul class='pagination pagination-sm' style='position:relative; top:-25px;'>";
     $config['full_tag_close']   = "</ul>";
     $config['num_tag_open']     = '<li>';
@@ -43,13 +40,57 @@ class Data_request extends CI_Controller
     $config['first_tagl_close'] = "</li>";
     $config['last_tag_open']    = "<li>";
     $config['last_tagl_close']  = "</li>";
+    $offset                     = $this->uri->segment(3);
+    $config['base_url']         = base_url('data_request/view');
+    $config['uri_segment']      = 3;
+
+    $search                     = $this->security->xss_clean($this->input->post('search'));
+    if(!empty($search))
+    {
+      $this->session->set_userdata('search_request', $search);
+      if($search == '*') $this->session->unset_userdata('search_request');
+    }
+
+    if($key = $this->session->userdata('search_request'))
+    {
+      $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created')
+                                      ->from('beo_customer AS c')
+                                      ->join('beo_request AS r', 'r.customer_id = c.id', 'left')
+                                      ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
+                                      ->like('r.id', $key)
+                                      ->or_like('c.username', $key)
+                                      ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->get()
+                                      ->num_rows();
+      
+      $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created')
+                              ->from('beo_customer AS c')
+                              ->join('beo_request AS r', 'r.customer_id = c.id', 'left')
+                              ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
+                              ->like('r.id', $key)
+                              ->or_like('c.username', $key)
+                              ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                              ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                              ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                              ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                              ->limit($config['per_page'], $offset)
+                              ->get();
+
+      $data['key']          = $key != '*' ? $key : '';
+    }else{
+      $config['total_rows'] = $this->db->get("beo_request")->num_rows();
+      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created');
+      $data['data']         = $this->db->from('beo_request AS r');
+      $data['data']         = $this->db->join('beo_customer AS c', 'r.customer_id = c.id', 'left');
+      $data['data']         = $this->db->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left');
+      $data['data']         = $this->db->limit($config['per_page'], $offset)->get();
+    }
     
     $this->pagination->initialize($config);    
     $data['paging']    = $this->pagination->create_links();
-    $data['data']      = $this->db->select('r.*, b.profile AS bengkel_profile');
-    $data['data']      = $this->db->from('beo_request AS r');
-    $data['data']      = $this->db->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left');
-    $data['data']      = $this->db->limit($config['per_page'], $offset)->get();
     $data['num_start'] = $offset + 1;
     $data['total']     = $config['total_rows'];
 

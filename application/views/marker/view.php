@@ -3,22 +3,52 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div class="container-fluid">
 	<div class="col-md-1 col-sm-2 col-xs-4 menu affix">
-	  <button type="button" class="btn btn_menu">
+	  <b type="button" class="btn btn_menu">
 	    <i class="fa fa-bars"></i> Menu
-	  </button>
-	  <div class="item">
+	  </b>
+	  <div class="item op">
 	    <ul>
-	      <a href="<?php echo base_url('data_request/view'); ?>" title="View data customer" data-toggle="tooltip"><li><i class="fa fa-database fa-6"></i></li></a>
+		    <?php
+	      $atts = array(
+	          'title'          => 'View Data Bengkel',
+	          'data-title'     => 'View Data Bengkel',
+	          'data-toggle'    => 'tooltip',
+	          'class'          => 'open_modal',
+	          'data-placement' => 'right'
+	        );
+	      echo anchor(base_url('data_bengkel/view'), '<i class="fa fa-database fa-6"></i>', $atts);
+	      ?>
 	    </ul>
 	    <ul>
-	      <a href="" title="Information about this application" data-toggle="tooltip"><li><i class="fa fa-question fa-6"></i></li></a>
+	    	<?php
+	      $atts['title'] = $atts['data-title'] = 'View Data Customer';
+
+	      echo anchor(base_url('data_customer/view'), '<i class = "fa fa-users fa-6"></i>', $atts);
+	      ?>
 	    </ul>
 	    <ul>
-	      <a href="<?php echo base_url('marker/logout'); ?>" title="Log out from System" data-toggle="tooltip"><li><i class="fa fa-sign-out fa-6"></i></li></a>
+	    	<?php
+	      $atts['title'] = $atts['data-title'] = 'View Data Order';
+
+	      echo anchor(base_url('data_request/view'), '<i class = "fa fa-shopping-cart fa-6"></i>', $atts);
+	      ?>
 	    </ul>
+	    <ul>
+	    	<?php
+	      $atts['title'] = 'Information about this application';
+	      echo anchor('#', '<i class="fa fa-question fa-6"></i>', $atts);
+	      ?>
+	    </ul>
+	    <ul>
+	    	<?php
+	    	$atts['class'] = 'confirm';
+	    	$atts['title'] = 'Logout from system';
+	    	echo anchor(base_url('marker/logout'), '<i class="fa fa-sign-out fa-6"></i>', $atts);
+	      ?>
+	     </ul>
 	  </div>
 	</div>
-	<div class="col-md-3 col-md-offset-9 col-xs-12 float_form affix">
+	<div class="col-md-3 col-md-offset-9 col-xs-12 float_form">
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<span class="h4" id="title"></span>
@@ -62,6 +92,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</div>
 </div>
 <div class="no"></div>
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&callback=nadhifMap" async defer></script>
-<script src="<?php echo base_url('assets/func.js');?>"></script>
 <script src="<?php echo base_url('assets/marker.js');?>"></script>

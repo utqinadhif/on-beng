@@ -6,19 +6,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <button type="button" class="btn btn_menu">
       <i class="fa fa-bars"></i> Menu
     </button>
-    <div class="item">
+    <div class="item op">
       <ul>
-        <a href="" class="load_url" data-load="<?php echo base_url('main/load/1'); ?>" tit="Information about how to use this application" title="Information about how to use this application" data-toggle="tooltip"><li><i class="fa fa-info fa-6"></i></li></a>
+        <?php
+        $atts = array(
+            'class'       => 'load_url',
+            'data-load'   => base_url('main/load/1'),
+            'tit'         => 'Information about how to use this application',
+            'title'       => 'Information about how to use this application',
+            'data-toggle' => 'tooltip'
+          );
+        echo anchor('', '<i class="fa fa-info fa-6"></i>', $atts);
+        ?>
       </ul>
       <ul>
-        <a href="" class="load_url" data-load="<?php echo base_url('main/load/2'); ?>" tit="Information about this application" title="Information about this application" data-toggle="tooltip"><li><i class="fa fa-question fa-6"></i></li></a>
+        <?php
+        $atts['title']     = $atts['tit'] = 'Information about this application';
+        $atts['data-load'] = base_url('main/load/2');
+
+        echo anchor('', '<i class="fa fa-question fa-6"></i>', $atts);
+        ?>
       </ul>
       <ul>
-        <a href="" class="open_hide" title="Sign In into System" data-toggle="tooltip"><li><i class="fa fa-sign-in fa-6"></i></li></a>
+        <?php
+        $atts['title'] = $atts['tit'] = 'Sign In into System';
+        $atts['class'] = 'open_hide';
+
+        echo anchor('', '<i class="fa fa-sign-in fa-6"></i>', $atts);
+        ?>
       </ul>
     </div>
   </div>
-  <div class="col-md-4 col-md-offset-4 col-xs-10 col-xs-offset-1 login affix">
+  <script type ="text/template" class="login hide">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <span class="h4">Log In</span>
@@ -37,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </form>
       </div>
     </div>
-  </div>
+  </script>
   <div class="col-md-12">
     <div id="map"></div>
   </div>
@@ -57,5 +76,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   </div>  
 </div>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&callback=nadhifMap" async defer></script>
-<script src="<?php echo base_url('assets/func.js');?>"></script>
 <script src="<?php echo base_url('assets/main.js'); ?>"></script>

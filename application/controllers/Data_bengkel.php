@@ -16,20 +16,17 @@ class Data_bengkel extends CI_Controller
     }
     $this->load->view('meta');
     $this->load->view('script');
-    $this->load->view('data/nav');
   }
   public function index()
   {
     redirect(base_url('data_bengkel/view'));
   }
 
-  function view($offset=0)
-  {    
-    $config['base_url']         = base_url('data_bengkel/view');
-    $config['total_rows']       = $this->db->get("beo_bengkel")->num_rows();
+  function view()
+  {
     $config['per_page']         = 10;
-    $config['uri_segment']      = 3;
     $config['num_links']        = 5;
+    $config['use_page_number']  = TRUE;
     $config['full_tag_open']    = "<ul class='pagination pagination-sm' style='position:relative; top:-25px;'>";
     $config['full_tag_close']   = "</ul>";
     $config['num_tag_open']     = '<li>';
@@ -44,10 +41,38 @@ class Data_bengkel extends CI_Controller
     $config['first_tagl_close'] = "</li>";
     $config['last_tag_open']    = "<li>";
     $config['last_tagl_close']  = "</li>";
-    
+    $offset                     = $this->uri->segment(3);
+    $config['base_url']         = base_url('data_bengkel/view');
+    $config['uri_segment']      = 3;
+
+    $search                     = $this->security->xss_clean($this->input->post('search'));
+    if(!empty($search))
+    {
+      $this->session->set_userdata('search_bengkel', $search);
+      if($search == '*') $this->session->unset_userdata('search_bengkel');
+    }
+
+    if($key = $this->session->userdata('search_bengkel'))
+    {
+      $config['total_rows'] = $this->db->like('id_marker', $key)
+                                      ->or_where("profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->or_where("latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->get('beo_bengkel')
+                                      ->num_rows();
+      $data['data']         = $this->db->like('id_marker', $key)
+                                      ->or_where("profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->or_where("latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->limit($config['per_page'], $offset)
+                                      ->order_by("created","desc")
+                                      ->get('beo_bengkel');
+      $data['key']          = $key != '*' ? $key : '';
+    }else{
+      $config['total_rows'] = $this->db->get("beo_bengkel")->num_rows();
+      $data['data']         = $this->db->limit($config['per_page'], $offset)->order_by("created","desc")->get("beo_bengkel");
+    }
+ 
     $this->pagination->initialize($config);    
     $data['paging']    = $this->pagination->create_links();
-    $data['data']      = $this->db->limit($config['per_page'], $offset)->get("beo_bengkel");
     $data['num_start'] = $offset + 1;
     $data['total']     = $config['total_rows'];
 

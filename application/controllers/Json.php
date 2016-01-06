@@ -33,7 +33,7 @@ class Json extends CI_Controller
 
     foreach ($all as $k => $v) {
       $profile  = json_decode($v->profile);
-      $location = json_decode($v->location);
+      $latlng = json_decode($v->latlng);
 
       $v->name = $profile->name;
       $key = $v->id_marker;
@@ -44,8 +44,9 @@ class Json extends CI_Controller
         "company"   => $profile->company,
         "contact"   => $profile->contact,
         "email"     => $profile->email,
-        "lat"       => $location->lat,
-        "lng"       => $location->lng,
+        "location"  => $profile->location,
+        "lat"       => $latlng->lat,
+        "lng"       => $latlng->lng,
         "created"   => $v->created,
         "updated"   => $v->updated,
         );

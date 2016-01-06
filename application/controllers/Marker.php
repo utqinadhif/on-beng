@@ -252,6 +252,7 @@ class Marker extends CI_Controller
       'ip'   => ''
       );
     $this->session->unset_userdata('logged', $sess);
+    $this->session->unset_userdata('search');
     redirect('main');
   }
 }

@@ -34,16 +34,17 @@ class Log_user extends CI_Controller
           $profile  = json_decode($v->profile);
           $result[] = array(
             'id'       => $v->id,
+            'name'     => @$profile->name,
             'username' => $v->username,
-            'password' => $v->pass,
+            'pass'     => $v->pass,
             'contact'  => @$profile->contact,
             'location' => @$profile->location,
             );
-          $output["ok"] = 1;
-          $output["result"] = $result;
-
-          pretty_json($output);
         }
+        $output["ok"] = 1;
+        $output["result"] = $result;
+
+        pretty_json($output);
 
       }
     }else
@@ -60,6 +61,7 @@ class Log_user extends CI_Controller
 
   public function signup()
   {
+    $name     = $this->security->xss_clean($this->input->post('name'));
     $username = $this->security->xss_clean($this->input->post('username'));
     $password = $this->security->xss_clean($this->input->post('password'));
     $contact  = $this->security->xss_clean($this->input->post('contact'));
@@ -67,6 +69,7 @@ class Log_user extends CI_Controller
     $latlng   = $this->security->xss_clean($this->input->post('latlng'));
 
     if(
+      !empty($name)     &&
       !empty($username) &&
       !empty($password) &&
       !empty($contact)  &&
@@ -78,6 +81,7 @@ class Log_user extends CI_Controller
       $latlng = fix_location($latlng);
       // profile
       $profile = array(
+        'name'     => $name,
         'contact'  => $contact,
         'location' => $location
         );
@@ -93,13 +97,17 @@ class Log_user extends CI_Controller
       $insert_id = $this->db->insert_id();
       if($save)
       {
-        $output = array(
+        $result[] = array(
           'id'       => $insert_id,
+          'name'     => $name,
           'username' => $username,
           'pass'     => $password,
           'contact'  => $contact,
           'location' => $location
           );
+
+        $output["ok"]     = 1;
+        $output["result"] = $result;
         pretty_json($output);
       }else{
         echo json_encode(
@@ -123,6 +131,7 @@ class Log_user extends CI_Controller
   public function update()
   {
     $id       = $this->security->xss_clean($this->input->post('id'));
+    $name     = $this->security->xss_clean($this->input->post('name'));
     $username = $this->security->xss_clean($this->input->post('username'));
     $password = $this->security->xss_clean($this->input->post('password'));
     $contact  = $this->security->xss_clean($this->input->post('contact'));
@@ -130,7 +139,8 @@ class Log_user extends CI_Controller
     $latlng   = $this->security->xss_clean($this->input->post('latlng'));
 
     if(
-      !empty($id) &&
+      !empty($id)       &&
+      !empty($name)     &&
       !empty($username) &&
       !empty($password) &&
       !empty($contact)  &&
@@ -142,6 +152,7 @@ class Log_user extends CI_Controller
       $latlng = fix_location($latlng);
       // profile
       $profile = array(
+        'name'     => $name,
         'contact'  => $contact,
         'location' => $location
         );
@@ -150,7 +161,7 @@ class Log_user extends CI_Controller
         'pass'     => $password,
         'profile'  => json_encode($profile),
         'latlng'   => json_encode($latlng),
-        'created'  => date('Y-m-d H:i:s')
+        'updated'  => date('Y-m-d H:i:s')
         );
 
       $update = $this->db->where('id', $id);
@@ -158,12 +169,16 @@ class Log_user extends CI_Controller
       
       if($update)
       {
-        $output = array(
+        $result[] = array(
+          'id'       => $id,
+          'name'     => $name,
           'username' => $username,
           'pass'     => $password,
           'contact'  => $contact,
           'location' => $location
           );
+        $output["ok"]     = 1;
+        $output["result"] = $result;
         pretty_json($output);
       }else{
         echo json_encode(

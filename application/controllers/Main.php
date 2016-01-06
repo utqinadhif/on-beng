@@ -9,6 +9,10 @@ class Main extends CI_Controller
 		$this->load->helper(array('url'));
 		$this->load->library(array('session'));
 		date_default_timezone_set('Asia/Jakarta');
+    if($this->session->userdata('logged'))
+    {
+      redirect('marker');
+    }
 	}
 
 	public function index()
@@ -32,43 +36,54 @@ class Main extends CI_Controller
       $query  = $this->db->from('beo_admin');
       $query  = $this->db->where('user', $user);
       $query  = $this->db->get();
-      $result = $query->row()->pass;
-      if(password_verify($result, $ph))
+      if($query->num_rows() > 0)
       {
-      	$sess = array(
-      		'user' => $user,
-      		'ip'   => $this->input->ip_address()
-      		);
+        $result = $query->row()
+                      ->pass;
+        if(password_verify($result, $ph))
+        {
+          $sess = array(
+            'user' => $user,
+            'ip'   => $this->input->ip_address()
+            );
 
-      	$this->session->set_userdata('logged', $sess);
+          $this->session->set_userdata('logged', $sess);
 
-      	$data = array(
-      		'last_login' => date('Y-m-d H:i:s')
-      		);
-      	$update = $this->db->where('user', $user);
-      	$update = $this->db->update('beo_admin', $data);
-      	echo json_encode(
-      		array(
-		        'ok'  => 1,
-		        'msg' => 'success',
-		        'href'=> base_url('marker')
-	        	)
-					);
-      }else
-      {
-      	echo json_encode(
-					array(
-		        'ok'  => 0,
-		        'msg' => 'Error login'
-		        )
-					);
+          $data = array(
+            'last_login' => date('Y-m-d H:i:s')
+            );
+          $update = $this->db->where('user', $user);
+          $update = $this->db->update('beo_admin', $data);
+          echo json_encode(
+            array(
+              'ok'  => 1,
+              'msg' => 'success',
+              'href'=> base_url('marker')
+              )
+            );
+        }else
+        {
+          echo json_encode(
+            array(
+              'ok'  => 0,
+              'msg' => 'Wrong password'
+              )
+            );
+        }
+      }else{
+        echo json_encode(
+          array(
+            'ok'  => 0,
+            'msg' => 'Username not found'
+            )
+          );
       }
 		}else
 		{
 			echo json_encode(
 				array(
 	        'ok'  => 0,
-	        'msg' => 'Error page'
+	        'msg' => 'Empty data'
 	        )
 				);
 		}
