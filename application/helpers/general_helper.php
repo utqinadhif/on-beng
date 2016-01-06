@@ -62,3 +62,15 @@ if(!function_exists('distance'))
     return $km;
   }
 }
+
+if(!function_exists('alert'))
+{
+  function alert($msg)
+  {
+    $m = '<div class="alert alert-danger">';
+    $m .= '<i class="fa fa-exclamation-triangle"></i>';
+    $m .= $msg;
+    $m .= '</div>';  
+    return $m;
+  }
+}

@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
   </div>
   <script type ="text/template" class="login hide">
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
       <div class="panel-heading">
         <span class="h4">Log In</span>
       </div>

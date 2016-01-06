@@ -1,18 +1,22 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-
 <div class="panel panel-default">
-  <form id="search" action="<?php echo base_url('data_customer/view'); ?>">
-    <div class="pull-right form-inline">
-      <span class="btn btn-default rst"><i class="fa fa-times"></i></span>
-      <input class="form-control" type="text" value="<?php echo isset($key) ? $key : null; ?>" placeholder="Search">
-    </div>
-  </form>
   <div class="panel-heading">
     Data Customer
   </div>
   <div class="panel-body">
+    <form id="search" action="<?php echo base_url('data_customer/view'); ?>" class="form-inline pull-right">
+      <div class="input-group">
+        <input class="form-control" type="text" value="<?php echo isset($key) ? $key : null; ?>" placeholder="Search" aria-describedby="rst">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+        </span>
+      </div>
+      <span class="btn btn-default rst"><i class="fa fa-times"></i></span>
+    </form>
+    <div class="clearfix"></div>
+    <hr class="devider">
     <?php
     if($total>0)
     {
@@ -67,6 +71,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </table>
       </div>
       <?php
+    }else{
+      echo alert('No data found');
     }
     ?>  
   </div>
