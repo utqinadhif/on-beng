@@ -53,28 +53,32 @@ class Data_request extends CI_Controller
 
     if($key = $this->session->userdata('search_request'))
     {
-      $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created')
+      $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
                                       ->from('beo_customer AS c')
                                       ->join('beo_request AS r', 'r.customer_id = c.id', 'left')
                                       ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
                                       ->like('r.id', $key)
+                                      ->or_like('r.detail_location', $key)
                                       ->or_like('c.username', $key)
                                       ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                                       ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                                       ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("b.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                                       ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                                       ->get()
                                       ->num_rows();
       
-      $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created')
+      $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
                               ->from('beo_customer AS c')
                               ->join('beo_request AS r', 'r.customer_id = c.id', 'left')
                               ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
                               ->like('r.id', $key)
+                              ->or_like('r.detail_location', $key)
                               ->or_like('c.username', $key)
                               ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                               ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                               ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                              ->or_where("b.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                               ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                               ->limit($config['per_page'], $offset)
                               ->get();
@@ -82,7 +86,7 @@ class Data_request extends CI_Controller
       $data['key']          = $key != '*' ? $key : '';
     }else{
       $config['total_rows'] = $this->db->get("beo_request")->num_rows();
-      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created');
+      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage');
       $data['data']         = $this->db->from('beo_request AS r');
       $data['data']         = $this->db->join('beo_customer AS c', 'r.customer_id = c.id', 'left');
       $data['data']         = $this->db->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left');

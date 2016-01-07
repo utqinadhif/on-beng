@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <label for="pass">Password:</label>
             <input type="password" name="pass" id="pass" class="form-control" placeholder="Password">
           </div>
-          <input type="submit" name="submit" value="Log In" id="submit" class="btn btn-primary btn-block">
+          <input type="submit" name="submit" value="Log In" id="submit" class="btn btn-default btn-block">
         </form>
       </div>
     </div>

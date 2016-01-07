@@ -9,9 +9,7 @@ class Form extends CI_Controller
     parent::__construct();
     $this->load->helper(array('url', 'general', 'date'));
     date_default_timezone_set('Asia/Jakarta');
-  }
-  public function general_request()
-  {
+
     $username    = $this->security->xss_clean($this->input->post('username'));
     $password    = $this->security->xss_clean($this->input->post('password'));
     if(
@@ -19,7 +17,7 @@ class Form extends CI_Controller
       !empty($password)
       )
     {
-      $customer_id = $this->_check($username, $password);
+      $this->customer_id = $this->_check($username, $password);
     }else
     {
       echo json_encode(
@@ -28,21 +26,19 @@ class Form extends CI_Controller
           'msg' => 'Error page'
           )
         );
+      die();
     }
+  }
 
-    //search near bengkel from current location
-    $name           = $this->security->xss_clean($this->input->post('name'));
-    $email          = $this->security->xss_clean($this->input->post('email'));
-    $contact        = $this->security->xss_clean($this->input->post('contact'));
-    $location       = $this->security->xss_clean($this->input->post('location'));
-    $latlng         = $this->security->xss_clean($this->input->post('latlng'));
-
+  public function general_request()
+  {
     $damage          = $this->security->xss_clean($this->input->post('damage'));    
     $detail_location = $this->security->xss_clean($this->input->post('detail_location'));
     $latlng          = $this->security->xss_clean($this->input->post('latlng'));
-    
+    $customer_id     = $this->customer_id;
 
     if(
+      $customer_id             &&
       !empty($damage)          &&
       !empty($detail_location) &&
       !empty($latlng)
@@ -73,6 +69,7 @@ class Form extends CI_Controller
         'latlng'          => json_encode($latlng),
         'detail_location' => $detail_location,
         'type'            => 1,
+        'damage'          => $damage,
         'created'         => date('Y-m-d H:i:s')
         );
       $save = $this->db->insert('beo_request', $data);
@@ -106,31 +103,14 @@ class Form extends CI_Controller
 
   public function spesific_request()
   {
-    $username    = $this->security->xss_clean($this->input->post('username'));
-    $password    = $this->security->xss_clean($this->input->post('password'));
-    if(
-      !empty($username) &&
-      !empty($password)
-      )
-    {
-      $customer_id = $this->_check($username, $password);
-    }else
-    {
-      echo json_encode(
-        array(
-          'ok'  => 0,
-          'msg' => 'Error page'
-          )
-        );
-    }
-
     $id_marker       = $this->security->xss_clean($this->input->post('id_marker'));
     $damage          = $this->security->xss_clean($this->input->post('damage'));    
     $detail_location = $this->security->xss_clean($this->input->post('detail_location'));
     $latlng          = $this->security->xss_clean($this->input->post('latlng'));
+    $customer_id     = $this->customer_id;
     
-
     if(
+      $customer_id             &&
       !empty($id_marker)       &&
       !empty($damage)          &&
       !empty($detail_location) &&
@@ -152,6 +132,7 @@ class Form extends CI_Controller
         'latlng'          => json_encode($latlng),
         'detail_location' => $detail_location,
         'type'            => 2,
+        'damage'          => $damage,
         'created'         => date('Y-m-d H:i:s')
         );
       $save = $this->db->insert('beo_request', $data);
@@ -196,11 +177,18 @@ class Form extends CI_Controller
       $query  = $this->db->from('beo_customer');
       $query  = $this->db->where('username', $username);
       $query  = $this->db->get();
-      $result = $query->row()->pass;
-      if(password_verify($result, $ph))
+      if($query->num_rows() > 0)
       {
-        return $query->row()->id;
-      }      
+        $result = $query->row()->pass;
+        if(password_verify($result, $ph))
+        {
+          return $query->row()->id;
+        }else {
+          return 0;
+        }
+      }else{
+        return 0;
+      }   
     }
   }
 }

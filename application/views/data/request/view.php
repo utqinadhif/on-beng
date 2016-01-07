@@ -27,8 +27,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <th>Name</th>
               <th>Email</th>
               <th>Contact</th>
-              <th>Detail Address</th>
               <th>Bengkel Ordered</th>
+              <th>Location Order</th>
+              <th>Type</th>
+              <th>Damage</th>
               <th>Process</th>
             </tr>
           </thead>
@@ -40,15 +42,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               $profile_customer = json_decode($value->profile_customer);
               $latlng_customer  = json_decode($value->latlng_customer);
               $profile_bengkel  = json_decode($value->profile_bengkel);
+              $latlng_bengkel   = json_decode($value->latlng_bengkel);
+              $latlng_order     = json_decode($value->latlng_order);
+              $type             = $value->type == 1 ? 'General Order' : 'Spesific Order';
+              if(strlen($value->damage) > 20)
+              {
+                $damage = substr($value->damage, 0, 20);
+                $solen  = true;
+              }else {
+                $damage = $value->damage;
+                $solen  = false;
+              }
               ?>
               <tr>
                 <td><?php echo $num_start++; ?></td>
-                <td><?php echo $profile_customer->name; ?></td>
-                <td><?php echo $value->username; ?></td>
-                <td><?php echo $profile_customer->contact; ?></td>
                 <td>
                   <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
                   <table>
+                    <tr>
+                      <th>Location</th>
+                      <td><?php echo $profile_customer->location; ?></td>
+                    </tr>
                     <tr>
                       <th>Lat</th>
                       <td><?php echo $latlng_customer->lat; ?></td>
@@ -58,8 +72,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       <td><?php echo $latlng_customer->lng; ?></td>
                     </tr>
                   </table>
-                  "><?php echo $profile_customer->location; ?></span>
+                  "><?php echo $profile_customer->name; ?></span>
                 </td>
+                <td><?php echo $value->username; ?></td>
+                <td><?php echo $profile_customer->contact; ?></td>
                 <td>
                   <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
                   <table>
@@ -77,6 +93,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </tr>
                   </table>
                   "><?php echo $profile_bengkel->name;?></span>
+                </td>
+                <td>
+                  <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
+                  <table>
+                    <tr>
+                      <th>Lat</th>
+                      <td><?php echo $latlng_order->lat; ?></td>
+                    </tr>
+                    <tr>
+                      <th>Lng</th>
+                      <td><?php echo $latlng_order->lng; ?></td>
+                    </tr>
+                  </table>
+                  "><?php echo $value->detail_location; ?></span>
+                </td>
+                <td><?php echo $type; ?></td>
+                <td>
+                  <?php
+                  if($solen)
+                  {
+                    ?>
+                    <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
+                      <?php echo $value->damage ?>
+                      "><?php echo $damage; ?> [...]
+                    </span>
+                    <?php
+                    
+                  }else {
+                    echo $damage;
+                  }
+                  ?>
                 </td>
                 <td>Link</td>
               </tr>
