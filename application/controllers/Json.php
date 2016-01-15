@@ -31,12 +31,12 @@ class Json extends CI_Controller
     $all = $this->db->get('beo_bengkel');
     $all = $all->result();
 
-    foreach ($all as $k => $v) {
-      $profile  = json_decode($v->profile);
-      $latlng = json_decode($v->latlng);
+    foreach ($all as $v) {
+      $profile = json_decode($v->profile);
+      $latlng  = json_decode($v->latlng);
 
-      $v->name = $profile->name;
-      $key = $v->id_marker;
+      $v->name  = $profile->name;
+      $key      = $v->id_marker;
       $result[] = array(
         "id"        => $v->id,
         "id_marker" => $v->id_marker,

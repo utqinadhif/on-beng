@@ -63,6 +63,21 @@ if(!function_exists('distance'))
   }
 }
 
+if(!function_exists('g_distance'))
+{
+  function g_distance($lat1, $lng1, $lat2, $lng2)
+  {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL,"http://maps.googleapis.com/maps/api/distancematrix/json?origins=$lat1,$lng1&destinations=$lat2,$lng2&mode=driving&language=en-EN&sensor=false");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $server_output = curl_exec ($ch);
+    curl_close ($ch);
+
+    $a = json_decode($server_output);
+    return preg_replace('~ km$~', '', $a->rows[0]->elements[0]->distance->text);
+  }
+}
+
 if(!function_exists('alert'))
 {
   function alert($msg)

@@ -41,7 +41,8 @@ class Data_customer extends CI_Controller
     $config['first_tagl_close'] = "</li>";
     $config['last_tag_open']    = "<li>";
     $config['last_tagl_close']  = "</li>";
-    $offset                     = $this->uri->segment(3);
+    $page                       = intval($this->uri->segment(3));
+    $offset                     = $page == 0 ? $page : $page * $config['per_page'] - $config['per_page'];
     $config['base_url']         = base_url('data_customer/view');
     $config['uri_segment']      = 3;
 

@@ -29,8 +29,9 @@ class Marker extends CI_Controller
 		$name      = $this->security->xss_clean($this->input->post('name'));
 		$company   = $this->security->xss_clean($this->input->post('company'));
 		$contact   = $this->security->xss_clean($this->input->post('contact'));
-		$email     = $this->security->xss_clean($this->input->post('email'));
-		$location  = $this->security->xss_clean($this->input->post('location'));
+    $email     = $this->security->xss_clean($this->input->post('email'));
+    $location  = $this->security->xss_clean($this->input->post('location'));
+		$price     = $this->security->xss_clean($this->input->post('price'));
     $latlng    = $this->security->xss_clean($this->input->post('latlng'));
     
 
@@ -39,6 +40,7 @@ class Marker extends CI_Controller
       !empty($company) &&
       !empty($contact) &&
       !empty($email)   &&
+      !empty($price)   &&
       !empty($location)
       )
     {
@@ -50,7 +52,8 @@ class Marker extends CI_Controller
         'company'  => $company,
         'contact'  => $contact,
         'email'    => $email,
-        'location' => $location
+        'location' => $location,
+        'price'    => $price
         );
       // main data
   		$data = array(
@@ -114,6 +117,7 @@ class Marker extends CI_Controller
     $contact   = $this->security->xss_clean($this->input->post('contact'));
     $email     = $this->security->xss_clean($this->input->post('email'));
     $location  = $this->security->xss_clean($this->input->post('location'));
+    $price     = $this->security->xss_clean($this->input->post('price'));
     $latlng    = $this->security->xss_clean($this->input->post('latlng'));
 
 
@@ -122,6 +126,7 @@ class Marker extends CI_Controller
       !empty($company) &&
       !empty($contact) &&
       !empty($email)   &&
+      !empty($price)   &&
       !empty($location)
       )
     {
@@ -133,7 +138,8 @@ class Marker extends CI_Controller
         'company'  => $company,
         'contact'  => $contact,
         'email'    => $email,
-        'location' => $location
+        'location' => $location,
+        'price'    => $price
         );
       // main data
       $data = array(
@@ -188,6 +194,7 @@ class Marker extends CI_Controller
 						'contact'   => $profile->contact,
 						'email'     => $profile->email,
             'location'  => $profile->location,
+            'price'     => $profile->price,
 						'latlng'    => '('.$latlng->lat.', '.$latlng->lng.')'
 						));
 				}

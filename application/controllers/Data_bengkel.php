@@ -26,7 +26,7 @@ class Data_bengkel extends CI_Controller
   {
     $config['per_page']         = 10;
     $config['num_links']        = 5;
-    $config['use_page_number']  = TRUE;
+    $config['use_page_numbers'] = TRUE;
     $config['full_tag_open']    = "<ul class='pagination pagination-sm' style='position:relative; top:-25px;'>";
     $config['full_tag_close']   = "</ul>";
     $config['num_tag_open']     = '<li>';
@@ -41,7 +41,8 @@ class Data_bengkel extends CI_Controller
     $config['first_tagl_close'] = "</li>";
     $config['last_tag_open']    = "<li>";
     $config['last_tagl_close']  = "</li>";
-    $offset                     = $this->uri->segment(3);
+    $page                       = intval($this->uri->segment(3));
+    $offset                     = $page == 0 ? $page : $page * $config['per_page'] - $config['per_page'];
     $config['base_url']         = base_url('data_bengkel/view');
     $config['uri_segment']      = 3;
 

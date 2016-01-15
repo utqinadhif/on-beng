@@ -1,55 +1,73 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$atts = array(
+  'title'          => 'Home',
+  'data-title'     => 'Home',
+  'data-toggle'    => 'tooltip',
+  'class'          => 'open_modal',
+  'data-placement' => 'bottom'
+  );
 ?>
 <div class="container-fluid">
-	<div class="col-md-1 col-sm-2 col-xs-4 menu affix">
-	  <b type="button" class="btn btn_menu">
-	    <i class="fa fa-bars"></i> Menu
-	  </b>
-	  <div class="item op">
-	    <ul>
-		    <?php
-	      $atts = array(
-	          'title'          => 'View Data Bengkel',
-	          'data-title'     => 'View Data Bengkel',
-	          'data-toggle'    => 'tooltip',
-	          'class'          => 'open_modal',
-	          'data-placement' => 'right'
-	        );
-	      echo anchor(base_url('data_bengkel/view'), '<i class="fa fa-database fa-6"></i>', $atts);
-	      ?>
-	    </ul>
-	    <ul>
-	    	<?php
-	      $atts['title'] = $atts['data-title'] = 'View Data Customer';
+	<div class="col-md-6 col-sm-12 col-xs-12 menu">
+		<nav class="navbar navbar-default">
+		  <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#onbeng">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <?php
+	      $s = $atts;
+	      $s['class'] = 'navbar-brand';
+	  		echo anchor(base_url('marker'), '<i class="fa fa-home"></i>On-Beng', $s);
+	  		?>
+	    </div>
+	    <div class="collapse navbar-collapse" id="onbeng">
+	      <ul class="nav navbar-nav">
+	        <li>
+		        <?php
+		        $atts['title']      = 'View Data Bengkel';
+		        $atts['data-title'] = 'View Data Bengkel';
 
-	      echo anchor(base_url('data_customer/view'), '<i class = "fa fa-users fa-6"></i>', $atts);
-	      ?>
-	    </ul>
-	    <ul>
-	    	<?php
-	      $atts['title'] = $atts['data-title'] = 'View Data Order';
+		        echo anchor(base_url('data_bengkel/view'), '<i class="fa fa-database fa-6"></i> Bengkel', $atts);
+		        ?>
+		      </li>
+		      <li>
+		        <?php
+		        $atts['title'] = $atts['data-title'] = 'View Data Customer';
 
-	      echo anchor(base_url('data_request/view'), '<i class = "fa fa-shopping-cart fa-6"></i>', $atts);
-	      ?>
-	    </ul>
-	    <ul>
-	    	<?php
-	      $atts['title'] = 'Information about this application';
-	      echo anchor('#', '<i class="fa fa-question fa-6"></i>', $atts);
-	      ?>
-	    </ul>
-	    <ul>
-	    	<?php
-	    	$atts['class'] = 'confirm';
-	    	$atts['title'] = 'Logout from system';
-	    	echo anchor(base_url('marker/logout'), '<i class="fa fa-sign-out fa-6"></i>', $atts);
-	      ?>
-	     </ul>
-	  </div>
+		        echo anchor(base_url('data_customer/view'), '<i class = "fa fa-users fa-6"></i> Customer', $atts);
+		        ?>
+		      </li>
+		      <li>
+		        <?php
+		        $atts['title'] = $atts['data-title'] = 'View Data Order';
+
+		        echo anchor(base_url('data_request/view'), '<i class = "fa fa-shopping-cart fa-6"></i> Order', $atts);
+		        ?>
+		      </li>
+		      <li>
+		        <?php
+		        $atts['title'] = 'Information about this application';
+		        echo anchor('#', '<i class="fa fa-question fa-6"></i> About', $atts);
+		        ?>
+		      </li>	      
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li>
+		        <?php
+		        $atts['class'] = 'confirm';
+		        $atts['title'] = 'Logout from system';
+		        echo anchor(base_url('marker/logout'), '<i class="fa fa-sign-out fa-6"></i> Signout', $atts);
+		        ?>
+		      </li>
+	      </ul>
+	    </div>
+		</nav>
 	</div>
 	<div class="col-md-3 col-md-offset-9 col-xs-12 float_form">
-		<div class="panel panel-default">
+		<div class="panel panel-defalit">
 			<div class="panel-heading">
 				<span class="h4" id="title"></span>
 				<span class="pull-right cls"><i class="fa fa-times"></i></span>
@@ -75,6 +93,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<div class="form-group">
 						<label for="location">Lokasi:</label>
 						<input type="text" name="location" id="location" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="price">Tarif Per KM:</label>
+						<input type="number" name="price" id="price" class="form-control" required>
 					</div>
 					<div class="form-group">
 						<label for="location">Koordinat:</label>

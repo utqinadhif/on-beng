@@ -1,46 +1,70 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$atts = array(
+  'title'          => 'Home',
+  'data-title'     => 'Home',
+  'data-toggle'    => 'tooltip',
+  'class'          => 'open_modal',
+  'data-placement' => 'bottom'
+  );
 ?>
 <div class="container-fluid">
-  <div class="col-md-1 col-sm-2 col-xs-4 menu affix">
-    <button type="button" class="btn btn_menu">
-      <i class="fa fa-bars"></i> Menu
-    </button>
-    <div class="item op">
-      <ul>
+  <div class="col-md-4 col-sm-12 col-xs-12 menu affix">
+    <nav class="navbar navbar-default">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#onbeng">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
         <?php
-        $atts = array(
-            'class'       => 'load_url',
-            'data-load'   => base_url('main/load/1'),
-            'tit'         => 'Information about how to use this application',
-            'title'       => 'Information about how to use this application',
-            'data-toggle' => 'tooltip'
-          );
-        echo anchor('', '<i class="fa fa-info fa-6"></i>', $atts);
+        $s = $atts;
+        $s['class'] = 'navbar-brand';
+        echo anchor(base_url('main'), '<i class="fa fa-home"></i>On-Beng', $s);
         ?>
-      </ul>
-      <ul>
-        <?php
-        $atts['title']     = $atts['tit'] = 'Information about this application';
-        $atts['data-load'] = base_url('main/load/2');
+      </div>
+      <div class="collapse navbar-collapse" id="onbeng">
+        <ul class="nav navbar-nav">
+          <li>
+            <?php
+            $atts = array(
+                'class'          => 'load_url',
+                'data-load'      => base_url('main/load/1'),
+                'tit'            => 'Information about how to use this application',
+                'title'          => 'Information about how to use this application',
+                'data-toggle'    => 'tooltip',
+                'data-placement' => 'bottom'
+              );
+            echo anchor('', '<i class="fa fa-info fa-6"></i> How to use', $atts);
+            ?>
+          </li>
+          <li>
+            <?php
+            $atts['title']     = $atts['tit'] = 'Information about this application';
+            $atts['data-load'] = base_url('main/load/2');
 
-        echo anchor('', '<i class="fa fa-question fa-6"></i>', $atts);
-        ?>
-      </ul>
-      <ul>
-        <?php
-        $atts['title'] = $atts['tit'] = 'Sign In into System';
-        $atts['class'] = 'open_hide';
+            echo anchor('', '<i class="fa fa-question fa-6"></i> About', $atts);
+            ?>
+          </li>       
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <?php
+            $atts['title'] = $atts['tit'] = 'Sign In into System';
+            $atts['class'] = 'open_hide';
 
-        echo anchor('', '<i class="fa fa-sign-in fa-6"></i>', $atts);
-        ?>
-      </ul>
-    </div>
+            echo anchor('', '<i class="fa fa-sign-in fa-6"></i> Sign in', $atts);
+            ?>
+          </li>
+        </ul>
+      </div>
+    </nav>
   </div>
+  <div class="clearfix"></div>
   <script type ="text/template" class="login hide">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <span class="h4">Log In</span>
+        <span class="h4"><i class="fa fa-user"></i> Log In</span>
       </div>
       <div class="panel-body">
         <form id="login" role="form">

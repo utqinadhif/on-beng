@@ -40,7 +40,8 @@ class Data_request extends CI_Controller
     $config['first_tagl_close'] = "</li>";
     $config['last_tag_open']    = "<li>";
     $config['last_tagl_close']  = "</li>";
-    $offset                     = $this->uri->segment(3);
+    $page                       = intval($this->uri->segment(3));
+    $offset                     = $page == 0 ? $page : $page * $config['per_page'] - $config['per_page'];
     $config['base_url']         = base_url('data_request/view');
     $config['uri_segment']      = 3;
 
@@ -54,8 +55,8 @@ class Data_request extends CI_Controller
     if($key = $this->session->userdata('search_request'))
     {
       $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
-                                      ->from('beo_customer AS c')
-                                      ->join('beo_request AS r', 'r.customer_id = c.id', 'left')
+                                      ->from('beo_request AS r')
+                                      ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                                       ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
                                       ->like('r.id', $key)
                                       ->or_like('r.detail_location', $key)
@@ -69,8 +70,8 @@ class Data_request extends CI_Controller
                                       ->num_rows();
       
       $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
-                              ->from('beo_customer AS c')
-                              ->join('beo_request AS r', 'r.customer_id = c.id', 'left')
+                              ->from('beo_request AS r')
+                              ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                               ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
                               ->like('r.id', $key)
                               ->or_like('r.detail_location', $key)
@@ -86,11 +87,11 @@ class Data_request extends CI_Controller
       $data['key']          = $key != '*' ? $key : '';
     }else{
       $config['total_rows'] = $this->db->get("beo_request")->num_rows();
-      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage');
-      $data['data']         = $this->db->from('beo_request AS r');
-      $data['data']         = $this->db->join('beo_customer AS c', 'r.customer_id = c.id', 'left');
-      $data['data']         = $this->db->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left');
-      $data['data']         = $this->db->limit($config['per_page'], $offset)->get();
+      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
+                                        ->from('beo_request AS r')
+                                        ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
+                                        ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
+                                        ->limit($config['per_page'], $offset)->get();
     }
     
     $this->pagination->initialize($config);    

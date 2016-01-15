@@ -1,6 +1,7 @@
 var markers   = {};
 var unchangedEnd;
 var unchangedStart;
+var temp = null;
 
 function nadhifMap() {
   var pati = {lat: -6.7449933, lng: 111.0460305};
@@ -29,8 +30,13 @@ function nadhifMap() {
   });
 
   google.maps.event.addListener(map, 'rightclick', function(event) {
+    if(temp!=null){
+      markers[temp].setMap(null);
+      delete markers[temp];
+    }
     var uid = nownow();
     addMarker(event.latLng, map, uid, 1);
+    temp = uid;
     $('.float_form').show('slide', { direction: "right" });
     reset();
     $('#latlng').val(event.latLng);
@@ -179,6 +185,7 @@ function searchMarker(latLng, id_marker){
         $('#contact').val(result.contact);
         $('#email').val(result.email);
         $('#location').val(result.location);
+        $('#price').val(result.price);
         $('#latlng').val(latLng);
         $('#current_loc').val(result.latlng);
         $('#title').html("FORM EDIT");
@@ -297,6 +304,7 @@ $(document).ready(function() {
           toast('Data successfully inserted');
           unchangedEnd   = undefined;
           unchangedStart = undefined;
+          temp = null;
         }
       });     
     }else // update data

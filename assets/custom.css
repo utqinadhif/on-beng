@@ -21,9 +21,9 @@ body,
 }
 .float_form {
   top:     7%;
-  height:  100%;
+  height:  90%;
   opacity: 0.7;
-  z-index: 9999;
+  z-index: 1;
   position: absolute;
   overflow-y: auto;
 }
@@ -34,29 +34,11 @@ body,
   margin: 5%;
 }
 .menu {
-  margin:  1%;
-  z-index: 9;
-}
-.btn_menu {
-  margin-bottom: 2%;
-}
-.item > ul,
-.btn_menu {
-  list-style-type: none;
-  border:          1px solid #9c27b0;
-  padding:         10%;
-  width:           100%;
-  text-align:      center;
-  border-radius:   5%;
-  background:      #FFF;
-  font-weight:     bold;
-  opacity:         0.7;
-}
-.item > ul:hover {
-  border: 1px solid #7b1fa2;
-}
-.op {
-  opacity: 0.1;
+  z-index: 1;
+  padding-left: 0;
+  padding-right: 0;
+  position: absolute;
+  margin: 0.5% 0 0 0.5%;
 }
 /*loading*/
 .loading {
