@@ -89,3 +89,16 @@ if(!function_exists('alert'))
     return $m;
   }
 }
+
+if(!function_exists('short_name'))
+{
+  function short_name($name)
+  {
+    $a = explode(' ', $name);
+    $r = substr($a[0], 0, 1);
+    if(count($a) > 1){
+      $r .= substr($a[1], 0, 1);
+    }
+    return strtoupper($r);
+  }
+}

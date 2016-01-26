@@ -133,15 +133,18 @@ class Form extends CI_Controller
   public function get_data()
   {
     $page     = intval($this->uri->segment(3));
-    $per_page = 1;
+    $per_page = 10;
     $offset   = $page == 0 ? $page : $page * $per_page - $per_page;
-    $data     = $this->db->select('r.id, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
+    $data     = $this->db->select('r.id, b.id_marker, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
                     ->from('beo_request AS r')
                     ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                     ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
                     ->where('r.customer_id', $this->customer_id)
                     ->limit($per_page, $offset)->get();
-    $status = array('','waiting', 'confirm', 'cancel', 'fail', 'done');
+    $total  = $this->db->where('customer_id', $this->customer_id)
+                  ->get('beo_request')
+                  ->num_rows();
+    $status = array('waiting', 'success', 'fail');
     $result = array();
     foreach ($data->result() as $v) {
       $profile_bengkel = json_decode($v->profile_bengkel);
@@ -149,19 +152,39 @@ class Form extends CI_Controller
       $latlng_order    = json_decode($v->latlng_order);
 
       $result[] = array(
-        'id'=> $v->id,
-        'id'=> $v->id,
-        'id'=> $v->id,
-        'id'=> $v->id,
-        'id'=> $v->id,
-        'id'=> $v->id,
-        'id'=> $v->id,
-        'id'=> $v->id,
+        'id'                => intval($v->id),
+        'logo_bengkel'      => short_name($profile_bengkel->name),
+        'name_bengkel'      => $profile_bengkel->name,
+        'date_order'        => $v->created,
+        'status_order'      => intval($v->status),
+        'status_order_text' => $status[$v->status],
+        'damage_order'      => $v->damage,
+        'detail_bengkel'    => array(
+          'id_marker' => floatval($v->id_marker),
+          'company'   => $profile_bengkel->company,
+          'contact'   => $profile_bengkel->contact,
+          'email'     => $profile_bengkel->email,
+          'location'  => $profile_bengkel->location,
+          'price'     => $profile_bengkel->price,
+          'lat'       => $latlng_bengkel->lat,
+          'lng'       => $latlng_bengkel->lng
+          ),
+        'detail_order' => array(
+          'detail_location' => $v->detail_location,
+          'lat'             => $latlng_order->lat,
+          'lng'             => $latlng_order->lng,
+          )
         );
     }
+    // "NF","Nadhif Fisip","12-11-2016","1","rusak"
 
-    $output['ok']     = 1;
-    $output['result'] = $result;
+    $output['ok']         = 1;
+    $output['result']     = array(
+      'list'       => $result,
+      'per_page'   => $per_page,
+      'total_data' => $total,
+      'total_page' => ceil($total/$per_page)
+      );
     pretty_json($output);
   }
 
