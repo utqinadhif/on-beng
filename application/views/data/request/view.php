@@ -31,6 +31,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <th>Location Order</th>
               <th>Type</th>
               <th>Damage</th>
+              <th>Status</th>
               <th>Process</th>
             </tr>
           </thead>
@@ -125,6 +126,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   }
                   ?>
                 </td>
+                <td><?php echo $status_text[$value->status];?></td>
                 <td>Link</td>
               </tr>
               <?php

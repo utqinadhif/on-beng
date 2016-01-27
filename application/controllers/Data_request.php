@@ -25,7 +25,7 @@ class Data_request extends CI_Controller
   {
     $config['per_page']         = 10;
     $config['num_links']        = 5;
-    $config['use_page_number']  = TRUE;
+    $config['use_page_numbers']  = TRUE;
     $config['full_tag_open']    = "<ul class='pagination pagination-sm' style='position:relative; top:-25px;'>";
     $config['full_tag_close']   = "</ul>";
     $config['num_tag_open']     = '<li>';
@@ -54,7 +54,7 @@ class Data_request extends CI_Controller
 
     if($key = $this->session->userdata('search_request'))
     {
-      $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
+      $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
                                       ->from('beo_request AS r')
                                       ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                                       ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
@@ -69,7 +69,7 @@ class Data_request extends CI_Controller
                                       ->get()
                                       ->num_rows();
       
-      $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
+      $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
                               ->from('beo_request AS r')
                               ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                               ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
@@ -87,7 +87,7 @@ class Data_request extends CI_Controller
       $data['key']          = $key != '*' ? $key : '';
     }else{
       $config['total_rows'] = $this->db->get("beo_request")->num_rows();
-      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage')
+      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
                                         ->from('beo_request AS r')
                                         ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                                         ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
@@ -95,9 +95,10 @@ class Data_request extends CI_Controller
     }
     
     $this->pagination->initialize($config);    
-    $data['paging']    = $this->pagination->create_links();
-    $data['num_start'] = $offset + 1;
-    $data['total']     = $config['total_rows'];
+    $data['paging']      = $this->pagination->create_links();
+    $data['num_start']   = $offset + 1;
+    $data['total']       = $config['total_rows'];
+    $data['status_text'] = array('Waiting', 'Confirm', 'Fail');
 
     $this->load->view('data/request/view', $data);
   }

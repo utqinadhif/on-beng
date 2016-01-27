@@ -26,7 +26,7 @@ class Data_customer extends CI_Controller
   {
     $config['per_page']         = 10;
     $config['num_links']        = 5;
-    $config['use_page_number']  = TRUE;
+    $config['use_page_numbers']  = TRUE;
     $config['full_tag_open']    = "<ul class='pagination pagination-sm' style='position:relative; top:-25px;'>";
     $config['full_tag_close']   = "</ul>";
     $config['num_tag_open']     = '<li>';
