@@ -23,46 +23,48 @@ $atts = array(
 	  		echo anchor(base_url('marker'), '<i class="fa fa-home"></i>On-Beng', $s);
 	  		?>
 	    </div>
-	    <div class="collapse navbar-collapse" id="onbeng">
-	      <ul class="nav navbar-nav">
-	        <li>
-		        <?php
-		        $atts['title']      = 'View Data Bengkel';
-		        $atts['data-title'] = 'View Data Bengkel';
+	    <div class="boxMenu">
+	    	<div class="collapse navbar-collapse" id="onbeng">
+		      <ul class="nav navbar-nav">
+		        <li>
+			        <?php
+			        $atts['title']      = 'View Data Bengkel';
+			        $atts['data-title'] = 'View Data Bengkel';
 
-		        echo anchor(base_url('data_bengkel/view'), '<i class="fa fa-database fa-6"></i> Bengkel', $atts);
-		        ?>
-		      </li>
-		      <li>
-		        <?php
-		        $atts['title'] = $atts['data-title'] = 'View Data Customer';
+			        echo anchor(base_url('data_bengkel/view'), '<i class="fa fa-database fa-6"></i> Bengkel', $atts);
+			        ?>
+			      </li>
+			      <li>
+			        <?php
+			        $atts['title'] = $atts['data-title'] = 'View Data Customer';
 
-		        echo anchor(base_url('data_customer/view'), '<i class = "fa fa-users fa-6"></i> Customer', $atts);
-		        ?>
-		      </li>
-		      <li>
-		        <?php
-		        $atts['title'] = $atts['data-title'] = 'View Data Order';
+			        echo anchor(base_url('data_customer/view'), '<i class = "fa fa-users fa-6"></i> Customer', $atts);
+			        ?>
+			      </li>
+			      <li>
+			        <?php
+			        $atts['title'] = $atts['data-title'] = 'View Data Order';
 
-		        echo anchor(base_url('data_request/view'), '<i class = "fa fa-shopping-cart fa-6"></i> Order', $atts);
-		        ?>
-		      </li>
-		      <li>
-		        <?php
-		        $atts['title'] = 'Information about this application';
-		        echo anchor('#', '<i class="fa fa-question fa-6"></i> About', $atts);
-		        ?>
-		      </li>	      
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li>
-		        <?php
-		        $atts['class'] = 'confirm';
-		        $atts['title'] = 'Logout from system';
-		        echo anchor(base_url('marker/logout'), '<i class="fa fa-sign-out fa-6"></i> Signout', $atts);
-		        ?>
-		      </li>
-	      </ul>
+			        echo anchor(base_url('data_request/view'), '<i class = "fa fa-shopping-cart fa-6"></i> Order', $atts);
+			        ?>
+			      </li>
+			      <li>
+			        <?php
+			        $atts['title'] = 'Information about this application';
+			        echo anchor('#', '<i class="fa fa-question fa-6"></i> About', $atts);
+			        ?>
+			      </li>	      
+		      </ul>
+		      <ul class="nav navbar-nav navbar-right">
+		        <li>
+			        <?php
+			        $atts['class'] = 'confirm';
+			        $atts['title'] = 'Logout from system';
+			        echo anchor(base_url('marker/logout'), '<i class="fa fa-sign-out fa-6"></i> Signout', $atts);
+			        ?>
+			      </li>
+		      </ul>
+		    </div>
 	    </div>
 		</nav>
 	</div>

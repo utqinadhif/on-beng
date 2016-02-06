@@ -6,7 +6,7 @@ class Marker extends CI_Controller
 	public function __construct()
 	{
     parent::__construct();
-    $this->load->helper(array('url', 'general', 'date'));
+    $this->load->helper(array('url', 'general', 'date', 'header'));
     $this->load->library(array('session'));
     date_default_timezone_set('Asia/Jakarta');
     if(!$this->session->userdata('logged'))
@@ -17,6 +17,7 @@ class Marker extends CI_Controller
 
 	public function index()
 	{
+    set_title('Admin Page Onbeng - Online Bengkel');
 		$this->load->view('meta');
     $this->load->view('script');
     $this->load->view('query_data');

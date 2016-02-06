@@ -4,6 +4,8 @@
 @import url('toast/jquery.toast.css');
 @import url('jquery-ui/jquery-ui.css');
 @import url('font-awesome/css/font-awesome.min.css');
+/*custom bootstrap*/
+@import url('custom-bootstrap.css');
 
 html,
 body,
@@ -78,15 +80,13 @@ body,
   border-bottom: 1px dashed #00F;
   cursor: help;
 }
-form#search .form-control {
-  margin-top: 3px;
-}
 
 /*media*/
 @media (max-width: 992px){
   .float_form {
     overflow-y: scroll;
     top:        1%;
+    height:     100%;
   }
   .cont {
     float: initial;
@@ -96,5 +96,8 @@ form#search .form-control {
   }
   .h-d {
     display: block;
+  }
+  .menu {
+    margin: 0;
   }
 }

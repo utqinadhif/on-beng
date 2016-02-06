@@ -1,0 +1,130 @@
+@charset "utf-8";
+
+/*navbar*/
+.navbar-default {
+  background-color: #FEFEFE;
+  border-color: #CE93D8;
+}
+.navbar {
+  border-radius: 0;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #9C27B0;
+}
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+  color: #7B1FA2;
+}
+.navbar-default .navbar-brand {
+  color: #9C27B0;
+}
+.navbar-default .navbar-brand:focus,
+.navbar-default .navbar-brand:hover {
+  color: #7B1FA2;
+}
+.navbar-default .navbar-toggle {
+  border-color: #CE93D8;
+}
+.navbar-toggle {
+  border-radius: 0;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #7B1FA2;
+}
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+  background-color: #CE93D8;
+}
+.navbar-collapse {
+  border: 1px solid #CE93D8;
+}
+/*tooltip*/
+.tooltip-inner {
+  background-color: #FEFEFE;
+  border-radius: 0;
+  color: #9C27B0;
+  border: 1px solid #CE93D8;
+}
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #CE93D8;
+}
+/*modal*/
+.modal-content {
+  background-color: #FEFEFE;;
+  border: 1px solid #CE93D8;
+  border-radius: 0;
+}
+.modal-header {
+  border-bottom: 1px solid #CE93D8;
+}
+/*panel*/
+.panel {
+  background-color: #FEFEFE;
+  border-radius: 0;
+}
+.panel-default {
+  border-color: #CE93D8;
+}
+.panel-default > .panel-heading,
+.panel-default > .panel-footer {
+  color: #9C27B0;
+  background-color: #E1BEE7;
+}
+/*form-control*/
+.form-control {
+  color: #9C27B0;
+  background-color: #FEFEFE;
+  border: 1px solid #CE93D8;
+  border-radius: 0;
+}
+.form-control:focus {
+  border-color: #9C27B0;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(255, 0, 243, 0.6);;
+}
+.form-control::-moz-placeholder {
+  color: #E1BEE7;
+}
+/*btn*/
+.btn {
+  border-radius: 0;
+}
+.btn-default {
+  color: #9C27B0;
+  background-color: #FEFEFE;
+  border-color: #CE93D8;
+}
+.btn-default:focus {
+  color: #FEFEFE;
+  background-color: #CE93D8;
+  border-color: #9C27B0;
+}
+.btn-default:hover,
+.btn-default:active:focus {
+  color: #9C27B0;
+  background-color: #E1BEE7;
+  border-color: #CE93D8;
+}
+.btn-default:active {
+  color: #E1BEE7;
+  background-color: #9C27B0;
+  border-color: #CE93D8;
+}
+@media (max-width: 992px){
+  .navbar {
+    border: 0;
+  }
+  .navbar-default {
+    background-color: transparent;
+  }
+  .navbar-header {
+    background-color: #FEFEFE;
+    border: 1px solid #CE93D8;
+  }
+  /*custom*/
+  .boxMenu {
+    margin: 5px 25px;
+    background-color: #FEFEFE;
+  }
+  .navbar-default .navbar-collapse {
+    border-color: #CE93D8;
+  }
+}

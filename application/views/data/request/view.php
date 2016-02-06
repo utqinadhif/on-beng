@@ -9,9 +9,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <input class="form-control" type="text" value="<?php echo isset($key) ? $key : null; ?>" placeholder="Search" aria-describedby="rst">
         <span class="input-group-btn">
           <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+          <span class="btn btn-default rst"><i class="fa fa-times"></i></span>
         </span>
       </div>
-      <span class="btn btn-default rst"><i class="fa fa-times"></i></span>
     </form>
     <div class="clearfix"></div>
     <hr class="devider">

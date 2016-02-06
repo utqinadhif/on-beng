@@ -6,7 +6,7 @@ class Main extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper(array('url'));
+		$this->load->helper(array('url', 'header'));
 		$this->load->library(array('session'));
 		date_default_timezone_set('Asia/Jakarta');
     if($this->session->userdata('logged'))
@@ -17,6 +17,7 @@ class Main extends CI_Controller
 
 	public function index()
 	{
+    set_title('Main Page Onbeng - Online Bengkel');
 		$this->load->view('meta');
 		$this->load->view('script');
 		$this->load->view('query_data');
@@ -31,6 +32,7 @@ class Main extends CI_Controller
 
     if(!empty($user) && !empty($pass))
     {
+      $pass   = hash('ripemd160', hash('sha1', $pass));
 		  $ph     = password_hash($pass, PASSWORD_BCRYPT);
 			$query  = $this->db->select('pass');
       $query  = $this->db->from('beo_admin');

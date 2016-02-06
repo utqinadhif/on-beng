@@ -23,49 +23,48 @@ $atts = array(
         echo anchor(base_url('main'), '<i class="fa fa-home"></i>On-Beng', $s);
         ?>
       </div>
-      <div class="collapse navbar-collapse" id="onbeng">
-        <ul class="nav navbar-nav">
-          <li>
-            <?php
-            $atts = array(
-                'class'          => 'load_url',
-                'data-load'      => base_url('main/load/1'),
-                'tit'            => 'Information about how to use this application',
-                'title'          => 'Information about how to use this application',
-                'data-toggle'    => 'tooltip',
-                'data-placement' => 'bottom'
-              );
-            echo anchor('', '<i class="fa fa-info fa-6"></i> How to use', $atts);
-            ?>
-          </li>
-          <li>
-            <?php
-            $atts['title']     = $atts['tit'] = 'Information about this application';
-            $atts['data-load'] = base_url('main/load/2');
+      <div class="boxMenu">
+        <div class="collapse navbar-collapse" id="onbeng">
+          <ul class="nav navbar-nav">
+            <li>
+              <?php
+              $atts = array(
+                  'class'          => 'load_url',
+                  'data-load'      => base_url('main/load/1'),
+                  'tit'            => 'Information about how to use this application',
+                  'title'          => 'Information about how to use this application',
+                  'data-toggle'    => 'tooltip',
+                  'data-placement' => 'bottom'
+                );
+              echo anchor('', '<i class="fa fa-info fa-6"></i> How to use', $atts);
+              ?>
+            </li>
+            <li>
+              <?php
+              $atts['title']     = $atts['tit'] = 'Information about this application';
+              $atts['data-load'] = base_url('main/load/2');
 
-            echo anchor('', '<i class="fa fa-question fa-6"></i> About', $atts);
-            ?>
-          </li>       
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <?php
-            $atts['title'] = $atts['tit'] = 'Sign In into System';
-            $atts['class'] = 'open_hide';
+              echo anchor('', '<i class="fa fa-question fa-6"></i> About', $atts);
+              ?>
+            </li>       
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <?php
+              $atts['title'] = $atts['tit'] = 'Sign In into System';
+              $atts['class'] = 'open_hide';
 
-            echo anchor('', '<i class="fa fa-sign-in fa-6"></i> Sign in', $atts);
-            ?>
-          </li>
-        </ul>
+              echo anchor('', '<i class="fa fa-sign-in fa-6"></i> Sign in', $atts);
+              ?>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   </div>
   <div class="clearfix"></div>
   <script type ="text/template" class="login hide">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <span class="h4"><i class="fa fa-user"></i> Log In</span>
-      </div>
       <div class="panel-body">
         <form id="login" role="form">
           <div class="form-group">
