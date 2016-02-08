@@ -5,14 +5,10 @@ function nadhifMap() {
     zoom:              11,
     mapTypeId:         google.maps.MapTypeId.ROADMAP,
     mapTypeControl:    false,
-    scrollwheel:       false,
     streetViewControl: false,
     scaleControl:      true,
-    zoomControl:       true,
-    animation:         google.maps.Animation.DROP
+    zoomControl:       true
   });
-
-  // map.setOptions({disableDoubleClickZoom: true });
 
   $.each(data, function(index, val) {
     addMarker(new google.maps.LatLng(val.lat, val.lng), map, val.id_marker, 1);
@@ -50,7 +46,8 @@ function addMarker(location, map, id_marker, icon) {
     draggable: false,
     label:     id_marker.toString(),
     map:       map,
-    bounds:    true
+    bounds:    true,
+    animation: google.maps.Animation.DROP
   });
 }
 $(document).ready(function() {

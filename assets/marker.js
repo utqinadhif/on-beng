@@ -10,13 +10,10 @@ function nadhifMap() {
     zoom:              11,
     mapTypeId:         google.maps.MapTypeId.ROADMAP,
     mapTypeControl:    false,
-    scrollwheel:       false,
     streetViewControl: false,
     scaleControl:      true,
     zoomControl:       true
   });
-
-  // map.setOptions({disableDoubleClickZoom: true });
 
   $.each(data, function(index, val) {
     addMarker(new google.maps.LatLng(val.lat, val.lng), map, val.id_marker, 1);
