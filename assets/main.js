@@ -8,10 +8,11 @@ function nadhifMap() {
     scrollwheel:       false,
     streetViewControl: false,
     scaleControl:      true,
-    zoomControl:       true
+    zoomControl:       true,
+    animation:         google.maps.Animation.DROP
   });
 
-  map.setOptions({disableDoubleClickZoom: true });
+  // map.setOptions({disableDoubleClickZoom: true });
 
   $.each(data, function(index, val) {
     addMarker(new google.maps.LatLng(val.lat, val.lng), map, val.id_marker, 1);
