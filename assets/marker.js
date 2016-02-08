@@ -1,10 +1,10 @@
 var markers   = {};
 var unchangedEnd;
 var unchangedStart;
-var temp = null;
+var temp   = null;
 
 function nadhifMap() {
-  var pati = {lat: -6.7449933, lng: 111.0460305};
+  var pati = new google.maps.LatLng(-6.7449933, 111.0460305);
   var map = new google.maps.Map(document.getElementById('map'), {
     center:            pati,
     zoom:              11,
@@ -19,21 +19,18 @@ function nadhifMap() {
   map.setOptions({disableDoubleClickZoom: true });
 
   $.each(data, function(index, val) {
-    addMarker({lat: parseFloat(val.lat), lng: parseFloat(val.lng)}, map, val.id_marker, 1);
+    addMarker(new google.maps.LatLng(val.lat, val.lng), map, val.id_marker, 1);
   });
 
   google.maps.event.addListener(map, 'click', function(event) {
     checkUnchangedMarker();
-
+    unsavedData();
     $('.float_form').hide('slide', { direction: "right" });
-    reset();      
+    reset();
   });
 
   google.maps.event.addListener(map, 'rightclick', function(event) {
-    if(temp!=null){
-      markers[temp].setMap(null);
-      delete markers[temp];
-    }
+    unsavedData();
     var uid = nownow();
     addMarker(event.latLng, map, uid, 1);
     temp = uid;
@@ -86,6 +83,7 @@ function addMarker(location, map, id_marker, icon) {
   var infowindow = new google.maps.InfoWindow();
 
   google.maps.event.addListener(marker, 'click', function(event) {
+    checkUnchangedMarker();
     reset();
     if(id_marker == 'you'){
       toast('Your location', 'i');
@@ -97,6 +95,7 @@ function addMarker(location, map, id_marker, icon) {
   });
 
   google.maps.event.addListener(marker, 'rightclick', function(event) {
+    checkUnchangedMarker();
     if(marker.get("id") != 'you'){
       dialog('Are you sure to delete the data?')
       $("#dialog").dialog('option', 'buttons', {
@@ -119,18 +118,18 @@ function addMarker(location, map, id_marker, icon) {
 
   google.maps.event.addListener(marker,'dragend',function(event) {
     searchMarker(event.latLng, marker.get("id"));
-    unchangedEnd = {
-      id_marker: marker.get("id"),
-      loc:       event.latLng
-    };
-    $('#latlng').val(event.latLng);
+    setTimeout(function(){
+      curloc = $('#current_loc').val().replace(/\(|\)|,/g, "").split(" ");
+      unchangedStart = {
+        id_marker: marker.get("id"),
+        loc:       new google.maps.LatLng(curloc[0], curloc[1])
+      };
+      unchangedEnd = {
+        id_marker: marker.get("id"),
+        loc:       event.latLng
+      };
+    }, 500);
     toast('The location has changed', 'i');
-  });
-  google.maps.event.addListener(marker,'dragstart',function(event) {
-    unchangedStart = {
-      id_marker: marker.get("id"),
-      loc:       event.latLng
-    };
   });
   google.maps.event.addListener(marker,'mouseover',function(event) {
     if(marker.get('id') != 'you'){
@@ -233,51 +232,59 @@ function deleteMarker(latLng, id_marker) {
 function checkUnchangedMarker(){
   if(unchangedEnd != null){
     $.ajax({
-    url: base_url+'marker/checkUnchangedMarker',
-    type: 'post',
-    dataType: 'json',
-    data: 'id_marker='+unchangedEnd.id_marker,
-    error: function (a, b, c) {
-      load(2);
-      toast(a+b+c, 'e')
-    },
-    cache: false,
-    beforeSend: function() {
-      load(1);
-    },
-    success: function(result){
-      load(2);
-      if(result.ok == 1){
-        dialog('This data from database. Are you wanna ignore the unsaved data and restore data in position before?')
-        $("#dialog").dialog('option', 'buttons', {
-          "YES, I'm Sure" : function(){
-            markers[unchangedEnd.id_marker].setPosition(unchangedStart.loc);
-            unchangedEnd   = undefined;
-            unchangedStart = undefined;
-            $(this).dialog('close');
-          },
-          "No" : function(){
-            $(this).dialog('close');
-          }
-        });
-      }else
-      if(result.ok == 2){
-        dialog('New data dragged, if you dont save change, this data deleted by system. Are you sure?');
-        $("#dialog").dialog('option', 'buttons', {
-          "YES, I'm Sure" : function(){
-            markers[unchangedEnd.id_marker].setMap(null);
-            delete markers[unchangedEnd.id_marker];
-            unchangedEnd   = undefined;
-            unchangedStart = undefined;
-            $(this).dialog('close');
-          },
-          "No" : function(){
-            $(this).dialog('close');
-          }
-        });        
+      url: base_url+'marker/checkUnchangedMarker',
+      type: 'post',
+      dataType: 'json',
+      data: 'id_marker='+unchangedEnd.id_marker,
+      error: function (a, b, c) {
+        load(2);
+        toast(a+b+c, 'e')
+      },
+      cache: false,
+      beforeSend: function() {
+        load(1);
+      },
+      success: function(result){
+        load(2);
+        if(result.ok == 1){
+          dialog('This data from database. Are you wanna ignore the unsaved data and restore data in position before?')
+          $("#dialog").dialog('option', 'buttons', {
+            "YES, I'm Sure" : function(){
+              markers[unchangedEnd.id_marker].setPosition(unchangedStart.loc);
+              unchangedEnd   = undefined;
+              unchangedStart = undefined;
+              $(this).dialog('close');
+            },
+            "No" : function(){
+              $(this).dialog('close');
+            }
+          });
+        }else
+        if(result.ok == 2){
+          dialog('New data dragged, if you dont save change, this data deleted by system. Are you sure?');
+          $("#dialog").dialog('option', 'buttons', {
+            "YES, I'm Sure" : function(){
+              markers[unchangedEnd.id_marker].setMap(null);
+              delete markers[unchangedEnd.id_marker];
+              unchangedEnd   = undefined;
+              unchangedStart = undefined;
+              $(this).dialog('close');
+            },
+            "No" : function(){
+              $(this).dialog('close');
+            }
+          });        
+        }
+        return result.ok;
       }
-    }
-  });
+    });
+  }
+}
+function unsavedData(){
+  if(temp!=null){
+    markers[temp].setMap(null);
+    delete markers[temp];
+    temp = null;
   }
 }
 $(document).ready(function() {

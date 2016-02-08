@@ -1,5 +1,5 @@
 function nadhifMap() {
-  var pati = {lat: -6.7449933, lng: 111.0460305};
+  var pati = new google.maps.LatLng(-6.7449933, 111.0460305);
   var map = new google.maps.Map(document.getElementById('map'), {
     center:            pati,
     zoom:              11,
@@ -14,7 +14,7 @@ function nadhifMap() {
   map.setOptions({disableDoubleClickZoom: true });
 
   $.each(data, function(index, val) {
-    addMarker({lat: parseFloat(val.lat), lng: parseFloat(val.lng)}, map, val.id_marker, 1);
+    addMarker(new google.maps.LatLng(val.lat, val.lng), map, val.id_marker, 1);
   });
 
   if (navigator.geolocation) {

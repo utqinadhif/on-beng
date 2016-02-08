@@ -140,6 +140,7 @@ class Form extends CI_Controller
                     ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                     ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
                     ->where('r.customer_id', $this->customer_id)
+                    ->order_by('r.created', 'desc')
                     ->limit($per_page, $offset)->get();
     $total  = $this->db->where('customer_id', $this->customer_id)
                   ->get('beo_request')
