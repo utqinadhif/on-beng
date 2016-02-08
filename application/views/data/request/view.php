@@ -109,7 +109,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </table>
                   "><?php echo $value->detail_location; ?></span>
                 </td>
-                <td><?php echo $type; ?></td>
+                <td>
+                  <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
+                  <table>
+                    <tr>
+                      <th>Date</th>
+                      <td><?php echo $value->created; ?></td>
+                    </tr>
+                  </table>
+                  "><?php echo $type; ?></span>
+                </td>
                 <td>
                   <?php
                   if($solen)

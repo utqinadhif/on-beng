@@ -86,7 +86,10 @@ $atts = array(
 					</div>
 					<div class="form-group">
 						<label for="contact">Kontak:</label>
-						<input type="number" name="contact" id="contact" class="form-control" required>
+						<div class="input-group">
+						  <span class="input-group-addon">+62</span>
+							<input type="number" name="contact" id="contact" class="form-control" required>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="email">Email:</label>
@@ -98,7 +101,10 @@ $atts = array(
 					</div>
 					<div class="form-group">
 						<label for="price">Tarif Per KM:</label>
-						<input type="number" name="price" id="price" class="form-control" required>
+						<div class="input-group">
+						  <span class="input-group-addon">Rp.</span>
+							<input type="number" name="price" id="price" class="form-control" required>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="location">Koordinat:</label>

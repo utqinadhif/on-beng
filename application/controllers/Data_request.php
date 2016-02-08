@@ -81,6 +81,7 @@ class Data_request extends CI_Controller
                               ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                               ->or_where("b.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                               ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                              ->order_by('r.created', 'desc')
                               ->limit($config['per_page'], $offset)
                               ->get();
 
@@ -91,6 +92,7 @@ class Data_request extends CI_Controller
                                         ->from('beo_request AS r')
                                         ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
                                         ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
+                                        ->order_by('r.created', 'desc')
                                         ->limit($config['per_page'], $offset)->get();
     }
     
