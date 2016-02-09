@@ -21,13 +21,21 @@ function nadhifMap() {
 
   google.maps.event.addListener(map, 'click', function(event) {
     checkUnchangedMarker();
-    unsavedData();
+    if(temp!=null){
+      markers[temp].setMap(null);
+      delete markers[temp];
+      temp = null;
+    }
     $('.float_form').hide('slide', { direction: "right" });
     reset();
   });
 
   google.maps.event.addListener(map, 'rightclick', function(event) {
-    unsavedData();
+    if(temp!=null){
+      markers[temp].setMap(null);
+      delete markers[temp];
+      temp = null;
+    }
     var uid = nownow();
     addMarker(event.latLng, map, uid, 1);
     temp = uid;
@@ -273,16 +281,8 @@ function checkUnchangedMarker(){
             }
           });        
         }
-        return result.ok;
       }
     });
-  }
-}
-function unsavedData(){
-  if(temp!=null){
-    markers[temp].setMap(null);
-    delete markers[temp];
-    temp = null;
   }
 }
 $(document).ready(function() {
