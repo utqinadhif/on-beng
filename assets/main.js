@@ -14,6 +14,10 @@ function nadhifMap() {
     addMarker(new google.maps.LatLng(val.lat, val.lng), map, val.id_marker, 1);
   });
 
+  google.maps.event.addListener(map, 'rightclick', function(event) {
+    toast('Please sign in to more action', 'i');
+  });
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = {
@@ -48,6 +52,10 @@ function addMarker(location, map, id_marker, icon) {
     map:       map,
     bounds:    true,
     animation: google.maps.Animation.DROP
+  });
+
+  google.maps.event.addListener(marker, 'click rightclick', function(event) {
+    toast('Please sign in to more action', 'i');
   });
 }
 $(document).ready(function() {
