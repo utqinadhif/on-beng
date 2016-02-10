@@ -121,10 +121,14 @@
   }
   /*custom*/
   .boxMenu {
-    margin: 5px 25px;
     background-color: #FEFEFE;
   }
   .navbar-default .navbar-collapse {
     border-color: #CE93D8;
+  }
+}
+@media (max-width: 767px){
+  .boxMenu {
+    margin: 5px 25px;
   }
 }
