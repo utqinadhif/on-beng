@@ -54,7 +54,10 @@ function addMarker(location, map, id_marker, icon) {
     animation: google.maps.Animation.DROP
   });
 
-  google.maps.event.addListener(marker, 'click rightclick', function(event) {
+  google.maps.event.addListener(marker, 'click', function(event) {
+    toast('Please sign in to more action', 'i');
+  });
+  google.maps.event.addListener(marker, 'rightclick', function(event) {
     toast('Please sign in to more action', 'i');
   });
 }
