@@ -12,5 +12,4 @@ $query 	= $this->db->get("beo_bengkel");
 	}
 	echo !empty($result) ? json_encode($result) : '{}';
 	?>;
-	var base_url  = '<?php echo base_url(); ?>';
 </script>
