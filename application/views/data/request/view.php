@@ -135,8 +135,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   }
                   ?>
                 </td>
-                <td><?php echo $status_text[$value->status];?></td>
-                <td>Link</td>
+                <td class="status"><?php echo ucfirst($status_text['status'][$value->status]); ?></td>
+                <td>
+                  <select class="form-control change-status" rel="<?php echo $value->id;?>">
+                    <option>Choose</option>
+                    <option disabled="true">_________</option>
+                    <?php
+                    foreach ($status_text['status_v'][$value->status] as $vs)
+                    {
+                      ?>
+                      <option value="<?php echo $vs; ?>"><?php echo ucfirst($status_text['status'][$vs]); ?></option>
+                      <?php                   
+                    }
+                    ?>
+                  </select>
+                </td>
               </tr>
               <?php
             }
@@ -156,3 +169,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="clearfix"></div>
   </div>
 </div>
+<script src="<?php echo base_url('assets/data_request.js'); ?>"></script>
