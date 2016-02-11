@@ -13,8 +13,6 @@ class Data_request extends CI_Controller
     {
       redirect('main');
     }
-    $this->load->view('meta');
-    $this->load->view('script');
   }
   public function index()
   {
@@ -23,6 +21,9 @@ class Data_request extends CI_Controller
 
   function view()
   {
+    $this->load->view('meta');
+    $this->load->view('script');
+
     $config['per_page']         = 10;
     $config['num_links']        = 5;
     $config['use_page_numbers']  = TRUE;
@@ -95,25 +96,79 @@ class Data_request extends CI_Controller
                                         ->order_by('r.created', 'desc')
                                         ->limit($config['per_page'], $offset)->get();
     }
+
+    $status   = array('waiting', 'process', 'confirm', 'cancel', 'done');
+    $status_v = array(
+      array(1, 3),
+      array(3),
+      array(4),
+      array(),
+      array()
+      );
     
     $this->pagination->initialize($config);    
     $data['paging']      = $this->pagination->create_links();
     $data['num_start']   = $offset + 1;
     $data['total']       = $config['total_rows'];
-    $data['status_text'] = array('Waiting', 'Confirm', 'Fail');
+    $data['status_text'] = array(
+      'status'   => $status,
+      'status_v' => $status_v
+      );
 
     $this->load->view('data/request/view', $data);
   }
 
-  function approve($id)  //approve to consumen that service on going
+  function change_status($id)  //approve to consumen that service on going
   {
-  }
+    $value = $this->security->xss_clean($this->input->post('value'));
+    if(!empty($id) && !empty($value))
+    {
+      $data = array(
+        'status'  => $value
+        );
+      $update = $this->db->where('id', $id);
+      $update = $this->db->update('beo_request', $data);
 
-  function cancel($id) //approve to consumen that service can not began
-  {
-  }
+      $status   = array('waiting', 'process', 'confirm', 'cancel', 'done');
+      $status_v = array(
+        array(1, 3),
+        array(3),
+        array(4),
+        array(),
+        array()
+        );
 
-  function edit($id) //edit request from consumen
-  {
+      if($update)
+      {
+        $option = '<option>Choose</option><option disabled="true">_________</option>';
+        foreach ($status_v[$value] as $vs)
+        {
+          $option .= '<option value="'.$vs.'">'.ucfirst($status[$vs]).'</option>';                  
+        }
+        echo json_encode(
+        array(
+          'ok'          => 1,
+          'msg'         => 'success',
+          'option'      => $option,
+          'status'      => $value,
+          'status_text' => ucfirst($status[$value])
+          )
+        );
+      }else{
+        echo json_encode(
+          array(
+            'ok'  => 0,
+            'msg' => 'Update fail'
+            )
+          );
+      }
+    }else{
+      echo json_encode(
+        array(
+          'ok'  => 0,
+          'msg' => 'One data is empty'
+          )
+        );
+    }
   }
 }
