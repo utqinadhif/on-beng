@@ -231,6 +231,9 @@ function deleteMarker(latLng, id_marker) {
         $('.float_form').hide('slide', { direction: "right" });
         markers[id_marker].setMap(null);
         delete markers[id_marker];
+        if(id_marker == temp){
+          temp = null;
+        }
       }
     }
   }); 
