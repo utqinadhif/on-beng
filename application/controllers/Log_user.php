@@ -28,7 +28,7 @@ class Log_user extends CI_Controller
       $query = $this->db->get();
       $all   = $query->result();
       $res   = $query->row();
-      if(password_verify($res->pass, $ph))
+      if(password_verify(@$res->pass, $ph))
       {
         foreach ($all as $k => $v) {
           $profile  = json_decode($v->profile);
@@ -46,6 +46,13 @@ class Log_user extends CI_Controller
 
         pretty_json($output);
 
+      }else{
+        echo json_encode(
+          array(
+            'ok'  => 0,
+            'msg' => 'Login Eror'
+            )
+          );
       }
     }else
     {
