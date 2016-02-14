@@ -145,7 +145,7 @@ class Form extends CI_Controller
     $total  = $this->db->where('customer_id', $this->customer_id)
                   ->get('beo_request')
                   ->num_rows();
-    $status = array('waiting', 'success', 'fail');
+    $status   = array('waiting', 'process', 'confirm', 'cancel', 'done');
     $result = array();
     foreach ($data->result() as $v) {
       $profile_bengkel = json_decode($v->profile_bengkel);
