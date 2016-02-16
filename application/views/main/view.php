@@ -99,4 +99,4 @@ $atts = array(
   </div>  
 </div>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&callback=nadhifMap" async defer></script>
-<script src="<?php echo base_url('assets/main.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/main.js'); ?>"></script>

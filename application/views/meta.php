@@ -14,7 +14,7 @@ $meta = array(
   );
 
 echo meta($meta);
-echo link_tag(base_url('assets/custom.css'));
+echo link_tag(base_url('assets/css/custom.css'));
 $link = array(
   'href' => base_url('assets/images/bengkel-icon.png'),
   'rel' => 'shortcut icon'

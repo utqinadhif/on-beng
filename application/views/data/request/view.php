@@ -169,4 +169,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="clearfix"></div>
   </div>
 </div>
-<script src="<?php echo base_url('assets/data_request.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/data_request.js'); ?>"></script>
