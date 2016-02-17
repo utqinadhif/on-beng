@@ -3,7 +3,7 @@ $(document).ready(function(){
     var t     = $(this);
     var id    = $(this).attr('rel');
     var value = $(this).val();
-    dialog('Are you sure to delete the data?')
+    dialog('Are you sure to change the data?')
     $("#dialog").dialog('option', 'buttons', {
       "Yes" : function(){
         var d = $(this);
