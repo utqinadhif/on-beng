@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Data_request extends CI_Controller
+class Data_order extends CI_Controller
 {
   function __construct()
   {
@@ -16,7 +16,7 @@ class Data_request extends CI_Controller
   }
   public function index()
   {
-    redirect(base_url('data_request/view'));
+    redirect(base_url('data_order/view'));
   }
 
   function view()
@@ -43,57 +43,63 @@ class Data_request extends CI_Controller
     $config['last_tagl_close']  = "</li>";
     $page                       = intval($this->uri->segment(3));
     $offset                     = $page == 0 ? $page : $page * $config['per_page'] - $config['per_page'];
-    $config['base_url']         = base_url('data_request/view');
+    $config['base_url']         = base_url('data_order/view');
     $config['uri_segment']      = 3;
 
-    $search                     = $this->security->xss_clean($this->input->post('search'));
-    if(!empty($search))
+    $search = $this->security->xss_clean($this->input->post('search'));
+    $submit = $this->security->xss_clean($this->input->post('submit'));
+    $reset  = $this->security->xss_clean($this->input->post('reset'));
+
+    if(!empty($search) && !empty($submit))
     {
-      $this->session->set_userdata('search_request', $search);
-      if($search == '*') $this->session->unset_userdata('search_request');
+      $this->session->set_userdata('search_order', $search);
+      redirect(base_url('data_order/view'));
+    }else
+    if(!empty($reset) || (!empty($submit) && empty($search)))
+    {
+      $this->session->unset_userdata('search_order');
+      redirect(base_url('data_order/view'));
     }
 
-    if($key = $this->session->userdata('search_request'))
+    if(!empty($key = $this->session->userdata('search_order')))
     {
-      $config['total_rows'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
-                                      ->from('beo_request AS r')
-                                      ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
-                                      ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
-                                      ->like('r.id', $key)
-                                      ->or_like('r.detail_location', $key)
+      $config['total_rows'] = $this->db->select('o.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, o.latlng AS latlng_order, o.detail_order, o.type, o.created, o.status')
+                                      ->from('beo_order AS o')
+                                      ->join('beo_customer AS c', 'o.customer_id = c.id', 'left')
+                                      ->join('beo_bengkel AS b', 'o.bengkel_id = b.id', 'inner')
+                                      ->like('o.id', $key)
                                       ->or_like('c.username', $key)
+                                      ->or_where("o.detail_order REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                                       ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                                       ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
-                                      ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("o.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                                       ->or_where("b.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
                                       ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
                                       ->get()
                                       ->num_rows();
       
-      $data['data'] = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
-                              ->from('beo_request AS r')
-                              ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
-                              ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'inner')
-                              ->like('r.id', $key)
-                              ->or_like('r.detail_location', $key)
-                              ->or_like('c.username', $key)
-                              ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
-                              ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
-                              ->or_where("r.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
-                              ->or_where("b.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
-                              ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
-                              ->order_by('r.created', 'desc')
-                              ->limit($config['per_page'], $offset)
-                              ->get();
+      $data['data'] = $this->db->select('o.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, o.latlng AS latlng_order, o.detail_order, o.type, o.created, o.status')
+                                      ->from('beo_order AS o')
+                                      ->join('beo_customer AS c', 'o.customer_id = c.id', 'left')
+                                      ->join('beo_bengkel AS b', 'o.bengkel_id = b.id', 'inner')
+                                      ->like('o.id', $key)
+                                      ->or_like('c.username', $key)
+                                      ->or_where("o.detail_order REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->or_where("c.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->or_where("c.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("o.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("b.latlng REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")     
+                                      ->or_where("b.profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")
+                                      ->get();
 
       $data['key']          = $key != '*' ? $key : '';
     }else{
-      $config['total_rows'] = $this->db->get("beo_request")->num_rows();
-      $data['data']         = $this->db->select('r.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
-                                        ->from('beo_request AS r')
-                                        ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
-                                        ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
-                                        ->order_by('r.created', 'desc')
+      $config['total_rows'] = $this->db->get("beo_order")->num_rows();
+      $data['data']         = $this->db->select('o.id, c.username, c.profile AS profile_customer, c.latlng AS latlng_customer, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, o.latlng AS latlng_order, o.detail_order, o.type, o.created, o.status')
+                                        ->from('beo_order AS o')
+                                        ->join('beo_customer AS c', 'o.customer_id = c.id', 'left')
+                                        ->join('beo_bengkel AS b', 'o.bengkel_id = b.id', 'left')
+                                        ->order_by('o.created', 'desc')
                                         ->limit($config['per_page'], $offset)->get();
     }
 
@@ -115,7 +121,7 @@ class Data_request extends CI_Controller
       'status_v' => $status_v
       );
 
-    $this->load->view('data/request/view', $data);
+    $this->load->view('data/order/view', $data);
   }
 
   function change_status($id)  //approve to consumen that service on going
@@ -127,7 +133,7 @@ class Data_request extends CI_Controller
         'status'  => $value
         );
       $update = $this->db->where('id', $id);
-      $update = $this->db->update('beo_request', $data);
+      $update = $this->db->update('beo_order', $data);
 
       $status   = array('waiting', 'process', 'confirm', 'cancel', 'done');
       $status_v = array(

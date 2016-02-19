@@ -6,12 +6,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     Data Bengkel
   </div>
   <div class="panel-body">
-    <form id="search" action="<?php echo base_url('data_bengkel/view'); ?>" class="form-inline pull-right">
+    <form action="<?php echo base_url('data_bengkel/view'); ?>" class="form-inline pull-right" method="POST">
       <div class="input-group">
-        <input class="form-control" type="text" value="<?php echo isset($key) ? $key : null; ?>" placeholder="Search" aria-describedby="rst">
+        <input class="form-control" name="search" type="text" value="<?php echo isset($key) ? $key : null; ?>" placeholder="Search" aria-describedby="rst">
         <span class="input-group-btn">
-          <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-          <span class="btn btn-default rst"><i class="fa fa-times"></i></span>
+          <button type="submit" class="btn btn-default" name="submit" value="1"><i class="fa fa-search"></i></button>
+          <button type="sumbit" class="btn btn-default rst" name="reset" value="1"><i class="fa fa-times"></i></button>
         </span>
       </div>
     </form>

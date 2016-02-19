@@ -45,7 +45,7 @@ $atts = array(
 			        <?php
 			        $atts['title'] = $atts['data-title'] = 'View Data Order';
 
-			        echo anchor(base_url('data_request/view'), '<i class = "fa fa-shopping-cart fa-6"></i> Order', $atts);
+			        echo anchor(base_url('data_order/view'), '<i class = "fa fa-shopping-cart fa-6"></i> Order', $atts);
 			        ?>
 			      </li>
 			      <li>

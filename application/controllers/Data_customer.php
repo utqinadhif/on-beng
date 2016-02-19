@@ -46,14 +46,22 @@ class Data_customer extends CI_Controller
     $config['base_url']         = base_url('data_customer/view');
     $config['uri_segment']      = 3;
 
-    $search                     = $this->security->xss_clean($this->input->post('search'));
-    if(!empty($search))
+    $search = $this->security->xss_clean($this->input->post('search'));
+    $submit = $this->security->xss_clean($this->input->post('submit'));
+    $reset  = $this->security->xss_clean($this->input->post('reset'));
+
+    if(!empty($search) && !empty($submit))
     {
       $this->session->set_userdata('search_customer', $search);
-      if($search == '*') $this->session->unset_userdata('search _customer');
+      redirect(base_url('data_customer/view'));
+    }else
+    if(!empty($reset) || (!empty($submit) && empty($search)))
+    {
+      $this->session->unset_userdata('search_customer');
+      redirect(base_url('data_customer/view'));
     }
 
-    if($key = $this->session->userdata('search_customer'))
+    if(!empty($key = $this->session->userdata('search_customer')))
     {
       $config['total_rows'] = $this->db->like('username', $key)
                                       ->or_where("profile REGEXP '\"([^\"]*)([^\"]*)\":\"([^\"]*)$key([^\"]*)\"'")

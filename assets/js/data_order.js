@@ -9,7 +9,7 @@ $(document).ready(function(){
         var d = $(this);
 
         $.ajax({
-          url: base_url+'data_request/change_status/'+id,
+          url: base_url+'data_order/change_status/'+id,
           type: 'POST',
           dataType: 'json',
           data: 'value='+value,

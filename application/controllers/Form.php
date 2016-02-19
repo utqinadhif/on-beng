@@ -30,17 +30,19 @@ class Form extends CI_Controller
     }
   }
 
-  public function request()
+  public function order()
   {
+    $customer_id     = $this->customer_id;
     $id_marker       = $this->security->xss_clean($this->input->post('id_marker'));
     $damage          = $this->security->xss_clean($this->input->post('damage'));    
     $detail_location = $this->security->xss_clean($this->input->post('detail_location'));
     $latlng          = $this->security->xss_clean($this->input->post('latlng'));
     $type            = $this->security->xss_clean($this->input->post('type'));
-    $customer_id     = $this->customer_id;
+    $distance        = $this->security->xss_clean($this->input->post('distance'));
+    $total_price     = $this->security->xss_clean($this->input->post('total_price'));
     
     if(
-      $customer_id             &&
+      !empty($customer_id)     &&
       !empty($id_marker)       &&
       !empty($damage)          &&
       !empty($detail_location) &&
@@ -54,17 +56,23 @@ class Form extends CI_Controller
       $bengkel_id = $query->row()->id;
       // location
       $latlng = fix_location($latlng);
+      // detail order
+      $detail_order = array(
+        'detail_location' => $detail_location,
+        'damage'          => $damage,
+        'distance'        => $distance,
+        'total_price'     => $total_price
+        );
       // main data
       $data = array(
-        'bengkel_id'      => $bengkel_id,
-        'customer_id'     => $customer_id,
-        'latlng'          => json_encode($latlng),
-        'detail_location' => $detail_location,
-        'type'            => $type,
-        'damage'          => $damage,
-        'created'         => date('Y-m-d H:i:s')
+        'bengkel_id'   => $bengkel_id,
+        'customer_id'  => $customer_id,
+        'latlng'       => json_encode($latlng),
+        'detail_order' => json_encode($detail_order),
+        'type'         => $type,
+        'created'      => date('Y-m-d H:i:s')
         );
-      $save = $this->db->insert('beo_request', $data);
+      $save = $this->db->insert('beo_order', $data);
       if($save)
       {
         echo json_encode(
@@ -135,15 +143,15 @@ class Form extends CI_Controller
     $page     = intval($this->uri->segment(3));
     $per_page = 10;
     $offset   = $page == 0 ? $page : $page * $per_page - $per_page;
-    $data     = $this->db->select('r.id, b.id_marker, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, r.created, r.type, r.detail_location, r.latlng AS latlng_order, r.damage, r.status')
-                    ->from('beo_request AS r')
-                    ->join('beo_customer AS c', 'r.customer_id = c.id', 'left')
-                    ->join('beo_bengkel AS b', 'r.bengkel_id = b.id', 'left')
-                    ->where('r.customer_id', $this->customer_id)
-                    ->order_by('r.created', 'desc')
+    $data     = $this->db->select('o.id, b.id_marker, b.profile AS profile_bengkel, b.latlng AS latlng_bengkel, o.created, o.type, o.latlng AS latlng_order, o.status, o.detail_order,')
+                    ->from('beo_order AS o')
+                    ->join('beo_customer AS c', 'o.customer_id = c.id', 'left')
+                    ->join('beo_bengkel AS b', 'o.bengkel_id = b.id', 'left')
+                    ->where('o.customer_id', $this->customer_id)
+                    ->order_by('o.created', 'desc')
                     ->limit($per_page, $offset)->get();
     $total  = $this->db->where('customer_id', $this->customer_id)
-                  ->get('beo_request')
+                  ->get('beo_order')
                   ->num_rows();
     $status   = array('waiting', 'process', 'confirm', 'cancel', 'done');
     $result = array();
@@ -151,6 +159,7 @@ class Form extends CI_Controller
       $profile_bengkel = json_decode($v->profile_bengkel);
       $latlng_bengkel  = json_decode($v->latlng_bengkel);
       $latlng_order    = json_decode($v->latlng_order);
+      $detail_order    = json_decode($v->detail_order);
 
       $result[] = array(
         'id'                => intval($v->id),
@@ -159,7 +168,7 @@ class Form extends CI_Controller
         'date_order'        => $v->created,
         'status_order'      => intval($v->status),
         'status_order_text' => $status[$v->status],
-        'damage_order'      => $v->damage,
+        'damage_order'      => $detail_order->damage,
         'detail_bengkel'    => array(
           'id_marker' => floatval($v->id_marker),
           'company'   => $profile_bengkel->company,
@@ -171,13 +180,14 @@ class Form extends CI_Controller
           'lng'       => $latlng_bengkel->lng
           ),
         'detail_order' => array(
-          'detail_location' => $v->detail_location,
+          'detail_location' => $detail_order->detail_location,
           'lat'             => $latlng_order->lat,
           'lng'             => $latlng_order->lng,
+          'distance'        => $detail_order->distance,
+          'total_price'     => $detail_order->total_price
           )
         );
     }
-    // "NF","Nadhif Fisip","12-11-2016","1","rusak"
 
     $output['ok']         = 1;
     $output['result']     = array(
@@ -187,6 +197,13 @@ class Form extends CI_Controller
       'total_page' => ceil($total/$per_page)
       );
     pretty_json($output);
+  }
+
+  public function change_status($status)
+  {
+    $output['ok']     = 1;
+    $output['result'] = 'opo bro??';
+    return json_encode($output);
   }
 
   public function _check($username, $password)

@@ -81,22 +81,4 @@ $(document).ready(function() {
     });
     return false;
   });
-  $('.rst').click(function(e){
-    e.preventDefault();
-    $.post('', {search: '*'}, function(data, textStatus, xhr) {
-      if(textStatus=='success'){
-        location.href=$('#search').attr('action');
-      }
-    });
-  });
-  $('#search').submit(function(e){
-    e.preventDefault();
-    var key = $(this).find('.form-control').val();
-    key = key ? key : '*';
-    $.post('', {search: key}, function(data, textStatus, xhr) {
-      if(textStatus=='success'){
-        location.href=$('#search').attr('action');
-      }
-    });
-  });
 });
