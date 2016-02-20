@@ -108,6 +108,9 @@
   background-color: #9C27B0;
   border-color: #CE93D8;
 }
+.popover {
+  border-radius: 0;
+}
 @media (max-width: 992px){
   .navbar {
     border: 0;
