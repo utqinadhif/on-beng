@@ -199,11 +199,71 @@ class Form extends CI_Controller
     pretty_json($output);
   }
 
-  public function change_status($status)
+  public function change_status($status, $id_order)
   {
-    $output['ok']     = 1;
-    $output['result'] = 'opo bro??';
-    return json_encode($output);
+    $c_data = $this->db->select('id, status')
+              ->from('beo_order')
+              ->where('customer_id', $this->customer_id)
+              ->get();
+    if(!empty($c_data))
+    {
+      foreach ($c_data->result() as $dt)
+      {
+        $id_orders[] = $dt->id;
+        $dt_sts[]    = $dt->status;
+      }
+      if(in_array($id_order, $id_orders))
+      {
+        $key      = array_search($id_order, $id_orders);
+        $s        = array('waiting', 'process', 'confirm', 'cancel', 'done');
+        $status_v = array(
+          array(3),
+          array(2, 3),
+          array(),
+          array(),
+          array()
+          );
+        if(in_array($status, $status_v[$dt_sts[$key]]))
+        {
+          $data = array(
+            'status' => $status
+            );
+          $update = $this->db->where('id', $id_order);
+          $update = $this->db->update('beo_order', $data);
+          if($update)
+          {
+            $output = array(
+              'ok'     => 1,
+              'result' => array(
+                'status'      => $status,
+                'status_text' => $s[$status],
+                )
+              ); 
+          }else{
+            $output = array(
+              'ok'  => 0,
+              'msg' => 'update fail'
+              ); 
+          }
+        }else{
+          $output = array(
+            'ok'  => 0,
+            'msg' => 'status can\'t change'
+            );
+        }        
+      }else{
+        $output = array(
+          'ok'  => 0,
+          'msg' => 'data not found'
+          );
+      }
+    }else{
+      $output = array(
+        'ok'  => 0,
+        'msg' => 'no data, may be your order list is empty'
+        );
+    }
+    echo json_encode($output);
   }
 
   public function _check($username, $password)
