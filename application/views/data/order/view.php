@@ -45,13 +45,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               $profile_bengkel  = json_decode($value->profile_bengkel);
               $latlng_bengkel   = json_decode($value->latlng_bengkel);
               $latlng_order     = json_decode($value->latlng_order);
+              $detail_order     = json_decode($value->detail_order);
               $type             = $value->type == 1 ? 'General Order' : 'Spesific Order';
-              if(strlen($value->damage) > 20)
+              if(strlen($detail_order->damage) > 20)
               {
-                $damage = substr($value->damage, 0, 20);
+                $damage = substr($detail_order->damage, 0, 20);
                 $solen  = true;
               }else {
-                $damage = $value->damage;
+                $damage = $detail_order->damage;
                 $solen  = false;
               }
               ?>
@@ -107,7 +108,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       <td><?php echo $latlng_order->lng; ?></td>
                     </tr>
                   </table>
-                  "><?php echo $value->detail_location; ?></span>
+                  "><?php echo $detail_order->detail_location; ?></span>
                 </td>
                 <td>
                   <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
@@ -125,7 +126,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   {
                     ?>
                     <span class="detail" data-toggle="popover" data-trigger="hover click" data-html="true" data-placement="bottom" title="" data-content="
-                      <?php echo $value->damage ?>
+                      <?php echo $detail_order->damage ?>
                       "><?php echo $damage; ?> [...]
                     </span>
                     <?php
