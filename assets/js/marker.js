@@ -4,6 +4,7 @@ var unchangedStart;
 var temp   = null;
 
 function nadhifMap() {
+  autocomplete('location');
   var pati = new google.maps.LatLng(-6.7449933, 111.0460305);
   var map = new google.maps.Map(document.getElementById('map'), {
     center:            pati,
@@ -134,7 +135,7 @@ function addMarker(location, map, id_marker, icon) {
         id_marker: marker.get("id"),
         loc:       event.latLng
       };
-    }, 500);
+    }, 1000);
     toast('The location has changed', 'i');
   });
   google.maps.event.addListener(marker,'mouseover',function(event) {
@@ -275,6 +276,9 @@ function checkUnchangedMarker(){
             "YES, I'm Sure" : function(){
               markers[unchangedEnd.id_marker].setMap(null);
               delete markers[unchangedEnd.id_marker];
+              if(unchangedEnd.id_marker == temp){
+                temp = null;
+              }
               unchangedEnd   = undefined;
               unchangedStart = undefined;
               $(this).dialog('close');

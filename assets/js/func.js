@@ -1,4 +1,4 @@
-function toast(string, id){
+var toast = function(string, id){
   switch(id) {
     case 'e':
       type = icon = 'error';
@@ -20,7 +20,7 @@ function toast(string, id){
     icon: icon
   })
 }
-function dialog(message){
+var dialog = function(message){
   $("body").append('<div id="dialog"></div>');
   $("#dialog").dialog({
       modal: true,
@@ -36,10 +36,10 @@ function dialog(message){
   $("#dialog").html(message);
   $("#dialog").dialog('open');
 }
-function reset() {
+var reset = function() {
   $('.form-control, .input').val('');
 }
-function load(id){
+var load = function(id){
   switch(id){
     case 1:
       $('.no').addClass('loading');
@@ -50,7 +50,7 @@ function load(id){
     break;
   }
 }
-function nownow(){
+var nownow = function(){
   var c = new Date();
   var y = String(c.getFullYear());
   var m = fix(c.getMonth());
@@ -61,9 +61,13 @@ function nownow(){
   return y+m+d+h+min+s;
 }
 
-function fix(x){
+var fix = function(x){
   y = String(x).length < 2 ? '0'+x : x;
   return y;
+}
+var autocomplete = function(id){
+  var b = document.getElementById(id);
+  var c = new google.maps.places.Autocomplete(b);
 }
 $(document).ready(function() { 
   $('[data-toggle="tooltip"]').bstooltip();

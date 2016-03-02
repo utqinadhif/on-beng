@@ -137,5 +137,5 @@ $atts = array(
 		</div>
 	</div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&callback=nadhifMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&callback=nadhifMap&libraries=places" async defer></script>
 <script src="<?php echo base_url('assets/js/marker.js');?>"></script>
