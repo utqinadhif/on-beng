@@ -62,12 +62,11 @@ class Json extends CI_Controller
     $page     = intval($this->uri->segment(3));
     $per_page = 10;
     $offset   = $page == 0 ? $page : $page * $per_page - $per_page;
-    $data     = $this->db->order_by('id_marker', 'asc')
+    $data     = $this->db->order_by('created', 'desc')
                       ->limit($per_page, $offset)
                       ->get('beo_bengkel');
 
-    $total  = $this->db->order_by('id_marker', 'asc')
-                      ->get('beo_bengkel')
+    $total  = $this->db->get('beo_bengkel')
                       ->num_rows();
 
     foreach ($data->result() as $v) {
