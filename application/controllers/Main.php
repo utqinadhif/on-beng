@@ -7,7 +7,7 @@ class Main extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper(array('url', 'header'));
-		$this->load->library(array('session'));
+		$this->load->library(array('session', 'encrypt'));
 		date_default_timezone_set('Asia/Jakarta');
     if($this->session->userdata('logged'))
     {
@@ -25,7 +25,7 @@ class Main extends CI_Controller
 	}
 
 
-	public function login()
+	public function login($json = null)
 	{
 		$user = $this->security->xss_clean($this->input->post('user'));
 		$pass = $this->security->xss_clean($this->input->post('pass'));
@@ -34,14 +34,13 @@ class Main extends CI_Controller
     {
       $pass   = hash('ripemd160', hash('sha1', $pass));
 		  $ph     = password_hash($pass, PASSWORD_BCRYPT);
-			$query  = $this->db->select('pass');
+			$query  = $this->db->select('id, pass');
       $query  = $this->db->from('beo_admin');
       $query  = $this->db->where('user', $user);
       $query  = $this->db->get();
       if($query->num_rows() > 0)
       {
-        $result = $query->row()
-                      ->pass;
+        $result = $query->row()->pass;
         if(password_verify($result, $ph))
         {
           $sess = array(
@@ -56,13 +55,15 @@ class Main extends CI_Controller
             );
           $update = $this->db->where('user', $user);
           $update = $this->db->update('beo_admin', $data);
-          echo json_encode(
-            array(
+          $output = array(
               'ok'  => 1,
               'msg' => 'success',
               'href'=> base_url('marker')
-              )
-            );
+              );
+          if($json == 'json'){
+            $output['token'] = $this->encrypt->encode($query->row()->id);
+          }
+          echo json_encode($output);
         }else
         {
           echo json_encode(

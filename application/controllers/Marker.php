@@ -7,11 +7,22 @@ class Marker extends CI_Controller
 	{
     parent::__construct();
     $this->load->helper(array('url', 'general', 'date', 'header'));
-    $this->load->library(array('session'));
+    $this->load->library(array('session', 'encrypt'));
     date_default_timezone_set('Asia/Jakarta');
     if(!$this->session->userdata('logged'))
     {
-      redirect('main');
+      $token = $this->security->xss_clean($this->input->post('token'));
+      if(!empty($token))
+      {
+        $admin = $this->encrypt->decode($token);
+        $query = $this->db->select('id')->from('beo_admin')->where('id', intval($admin))->get();
+        if($query->num_rows() != 1)
+        {
+          redirect('main');
+        }
+      }else{
+        redirect('main');
+      }
     }
 	}
 
@@ -157,7 +168,8 @@ class Marker extends CI_Controller
       {
         echo json_encode(
           array(
-            'ok'=>1
+            'ok' => 1,
+            'id' => $id_marker
             )
           );
       }
